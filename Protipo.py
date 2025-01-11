@@ -6,7 +6,8 @@ import pandas as pd
 def init_db():
     conn = sqlite3.connect("empresa_db.sqlite")
     cursor = conn.cursor()
-    cursor.execute("""
+    cursor.execute("""DROP TABLE IF EXISTS empresas""")  # テーブルを削除
+    cursor.execute(""" 
         CREATE TABLE IF NOT EXISTS empresas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT,
@@ -14,7 +15,7 @@ def init_db():
             uso_fondos TEXT,
             ventas_anuales REAL,
             costos_deventas REAL,
-            costos_administrativos REAL,
+            costos_administrativos REAL, 
             costos_financieros REAL,
             activos_corrientes REAL,
             activos_fijos REAL,
@@ -23,15 +24,8 @@ def init_db():
             retraso_pago INTEGER
         )
     """)
-
-        
-
-
-    
     conn.commit()
     return conn
-
-
 
 # データを挿入
 def insertar_empresa(conn, datos):
