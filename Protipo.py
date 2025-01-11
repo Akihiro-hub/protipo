@@ -72,32 +72,43 @@ opcion = st.sidebar.selectbox("Seleccionar pantalla", [
 if opcion == "Ingresar información de la empresa":
     st.header("Ingresar información de la empresa")
 
-    # 入力フォーム
-    with st.form("empresa_form"):
-        nombre = st.text_input("Nombre de la empresa")
-        sector = st.selectbox("Sector de la empresa", [
-            "Carpintería", "Comedor", "Corte y confección", "Panadería", "Herrería", "Comercio", "Otros"
-        ])
-        uso_fondos = st.selectbox("Uso de los fondos", [
-            "Capital de trabajo", "Capital de inversión"
-        ])
-        activos_corrientes = st.number_input("Activos corrientes", min_value=0.0, step=1.0)
-        activos_fijos = st.number_input("Activos fijos", min_value=0.0, step=1.0)
-        pasivos = st.number_input("Pasivos", min_value=0.0, step=1.0)
-        capital_propio = st.number_input("Capital propio", min_value=0.0, step=1.0)
-        retraso_pago = st.checkbox("¿Hubo retrasos en el pago?")
-
+    # データ挿入フォーム（3列レイアウト）
+    with st.form("empresa_form"):  # フォームの開始
+        col1, col2, col3 = st.columns(3)  # 3列を作成
+    
+        # 1列目
+        with col1:
+            nombre = st.text_input("Nombre de la empresa")
+            activos_corrientes = st.number_input("Activos corrientes", min_value=0.0, step=1.0)
+            pasivos = st.number_input("Pasivos", min_value=0.0, step=1.0)
+    
+        # 2列目
+        with col2:
+            sector = st.selectbox("Sector de la empresa", [
+                "Carpintería", "Comedor", "Corte y confección", "Panadería", "Herrería", "Comercio", "Otros"
+            ])
+            activos_fijos = st.number_input("Activos fijos", min_value=0.0, step=1.0)
+            capital_propio = st.number_input("Capital propio", min_value=0.0, step=1.0)
+    
+        # 3列目
+        with col3:
+            uso_fondos = st.selectbox("Uso de los fondos", [
+                "Capital de trabajo", "Capital de inversión"
+            ])
+            retraso_pago = st.checkbox("¿Hubo retrasos en el pago?")
+    
         # フォーム送信ボタン
         enviado = st.form_submit_button("Guardar datos")
-
+    
         if enviado:
             datos = (
                 nombre, sector, uso_fondos,
                 activos_corrientes, activos_fijos, pasivos, capital_propio,
                 1 if retraso_pago else 0
             )
-            insertar_empresa(conn, datos)
+            insertar_empresa(conn, datos)  # データベースに保存
             st.success("¡Información guardada exitosamente!")
+
 
 elif opcion == "Buscar información de la empresa":
     st.header("Buscar información de la empresa")
