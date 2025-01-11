@@ -1,6 +1,6 @@
 matplotlib
 numpy
 streamlit
-sqlite3
+sqlite
 pandas
 
