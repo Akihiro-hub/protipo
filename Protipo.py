@@ -32,7 +32,7 @@ def insertar_empresa(conn, datos):
     cursor.execute("""
         INSERT INTO empresas (
             nombre, sector, uso_fondos, ventas_anuales, costos_deventas, costos_administrativos, costos_financieros, activos_corrientes, activos_fijos, pasivos, capital_propio, retraso_pago
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     """, datos)
     conn.commit()
 
