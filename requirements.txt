@@ -1,7 +1,6 @@
 matplotlib
-openpyxl
 numpy
 streamlit
 sqlite3
 pandas
-localtunnel
+
