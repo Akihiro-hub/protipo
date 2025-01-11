@@ -75,6 +75,7 @@ opcion = st.sidebar.selectbox("Seleccionar pantalla", [
 
 if opcion == "Ingresar información de la empresa":
     st.header("Ingresar información de la empresa")
+    st.write(f"**ID de la empresa:** {empresa_id}")
 
     # データ挿入フォーム（3列レイアウト）
     with st.form("empresa_form"):  # フォームの開始
