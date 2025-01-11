@@ -151,9 +151,12 @@ elif opcion == "Buscar información de la empresa":
 
             # 全企業の平均値を計算
             todas_empresas = obtener_todas_empresas(conn)
+
             df_empresas = pd.DataFrame(todas_empresas, columns=[
-                "ID", "Nombre", "Sector", "Uso_fondos", "Activos_corrientes", "Activos_fijos", "Pasivos", "Capital_propio", "Retraso_pago"
+                "ID", "Nombre", "Sector", "Uso_fondos", "Ventas_anuales", "Costos_deventas", "Costos_administrativos",
+                "Costos_financieros", "Activos_corrientes", "Activos_fijos", "Pasivos", "Capital_propio", "Retraso_pago"
             ])
+
             promedio_corriente = (df_empresas["Activos_corrientes"] / df_empresas["Pasivos"]).mean()
             promedio_capital_propio = (df_empresas["Capital_propio"] / (df_empresas["Activos_corrientes"] + df_empresas["Activos_fijos"])).mean()
 
