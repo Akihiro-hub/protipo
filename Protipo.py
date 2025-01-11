@@ -12,6 +12,10 @@ def init_db():
             nombre TEXT,
             sector TEXT,
             uso_fondos TEXT,
+            ventas_anuales REAL,
+            costos_deventas REAL,
+            costos_administrativos REAL, 
+            costos_financieros REAL,
             activos_corrientes REAL,
             activos_fijos REAL,
             pasivos REAL,
@@ -27,8 +31,8 @@ def insertar_empresa(conn, datos):
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO empresas (
-            nombre, sector, uso_fondos, activos_corrientes, activos_fijos, pasivos, capital_propio, retraso_pago
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            nombre, sector, uso_fondos, ventas_anuales, costos_deventas, costos_administrativos, costos_financieros, activos_corrientes, activos_fijos, pasivos, capital_propio, retraso_pago
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, datos)
     conn.commit()
 
@@ -58,7 +62,7 @@ def calcular_indicadores(activos_corrientes, activos_fijos, pasivos, capital_pro
     return razon_corriente, razon_capital_propio
 
 # Streamlitアプリの開始
-st.title("Sistema de Gestión de Información para Préstamos")
+st.title("Sistema de Gestión de Información para Créditos a PyMEs")
 
 # データベースの初期化
 conn = init_db()
@@ -79,16 +83,20 @@ if opcion == "Ingresar información de la empresa":
         # 1列目
         with col1:
             nombre = st.text_input("Nombre de la empresa")
-            activos_corrientes = st.number_input("Activos corrientes", min_value=0.0, step=1.0)
-            pasivos = st.number_input("Pasivos", min_value=0.0, step=1.0)
+            ventas_anuales = st.number_input("Ventas anuales", min_value=0, step=1)
+            costos_deventas = st.number_input("Costos de ventas", min_value=0, step=1)
+            costos_administrativos = st.number_input("Costos administrativos", min_value=0, step=1)
+            costos_financieros = st.number_input("Costos financieros", min_value=0, step=1)
     
         # 2列目
         with col2:
             sector = st.selectbox("Sector de la empresa", [
                 "Carpintería", "Comedor", "Corte y confección", "Panadería", "Herrería", "Comercio", "Otros"
             ])
-            activos_fijos = st.number_input("Activos fijos", min_value=0.0, step=1.0)
-            capital_propio = st.number_input("Capital propio", min_value=0.0, step=1.0)
+            activos_corrientes = st.number_input("Activos corrientes", min_value=0, step=1)
+            activos_fijos = st.number_input("Activos fijos", min_value=0, step=1)
+            pasivos = st.number_input("Pasivos", min_value=0, step=1)
+            capital_propio = st.number_input("Capital propio", min_value=0, step=1)
     
         # 3列目
         with col3:
