@@ -136,6 +136,14 @@ if opcion == "Ingresar información de la empresa":
             insertar_empresa(conn, datos)
             st.success("¡Información guardada exitosamente!")
 
+    # 「Borrar todos los datos registrados」ボタン
+    borrar_datos = st.button("Borrar todos los datos registrados")
+    if borrar_datos:
+        # 全データを削除する処理
+        cursor.execute("DELETE FROM empresas")
+        conn.commit()
+        st.success("Todos los datos han sido eliminados.")
+
 
 elif opcion == "Buscar información de la empresa":
     st.header("Buscar información de la empresa")
