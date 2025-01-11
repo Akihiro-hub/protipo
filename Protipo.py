@@ -75,7 +75,15 @@ opcion = st.sidebar.selectbox("Seleccionar pantalla", [
 
 if opcion == "Ingresar información de la empresa":
     st.header("Ingresar información de la empresa")
-    st.write(f"**ID de la empresa:** {"empresa_id"}")
+    
+    # 最新の企業IDを取得
+    cursor = conn.cursor()
+    cursor.execute("SELECT MAX(id) FROM empresas")
+    max_id = cursor.fetchone()[0]
+    nuevo_id = max_id + 1 if max_id is not None else 1  # 既存の最大ID + 1、または1
+
+    # 企業IDを表示
+    st.write(f"**ID de la nueva empresa:** {nuevo_id}")
 
     # データ挿入フォーム（3列レイアウト）
     with st.form("empresa_form"):  # フォームの開始
