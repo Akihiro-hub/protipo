@@ -111,9 +111,9 @@ if opcion == "Ingresar información de la empresa":
         # データタプルの作成時にデフォルト値を設定
         if enviado:
             datos = (
-                nombre or "N/A",  # 名前が空なら "N/A" を設定
-                sector or "Otros",  # セクターが選択されていなければ "Otros"
-                uso_fondos or "Capital de trabajo",
+                nombre,  
+                sector,  
+                uso_fondos,
                 ventas_anuales or 0,
                 costos_deventas or 0,
                 costos_administrativos or 0,
