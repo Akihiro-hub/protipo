@@ -108,14 +108,23 @@ if opcion == "Ingresar información de la empresa":
         # フォーム送信ボタン
         enviado = st.form_submit_button("Guardar datos")
     
+        # データタプルの作成時にデフォルト値を設定
         if enviado:
             datos = (
-                nombre, sector, uso_fondos,
-                ventas_anuales, costos_deventas, costos_administrativos, costos_financieros,
-                activos_corrientes, activos_fijos, pasivos, capital_propio,
-                1 if retraso_pago else 0
+                nombre or "N/A",  # 名前が空なら "N/A" を設定
+                sector or "Otros",  # セクターが選択されていなければ "Otros"
+                uso_fondos or "Capital de trabajo",
+                ventas_anuales or 0,
+                costos_deventas or 0,
+                costos_administrativos or 0,
+                costos_financieros or 0,
+                activos_corrientes or 0,
+                activos_fijos or 0,
+                pasivos or 0,
+                capital_propio or 0,
+                1 if retraso_pago else 0  # チェックボックスの値は整数型に変換
             )
-            insertar_empresa(conn, datos)  # データベースに保存
+            insertar_empresa(conn, datos)
             st.success("¡Información guardada exitosamente!")
 
 
