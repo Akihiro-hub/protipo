@@ -301,15 +301,15 @@ elif opcion == "Analizar moras":
         if todas_empresas:
             # データフレーム作成
             df_empresas = pd.DataFrame(todas_empresas, columns=[
-                "ID", "Nombre", "Sector", "Uso_fondos", "monto_préstamos", "Ventas_anuales", "Costos_deventas", 
-                "Costos_administrativos", "Costos_financieros", "Activos_corrientes", "Activos_fijos", 
-                "Pasivos", "Capital_propio", "Retraso_pago"
+                "id", "nombre", "sector", "uso_fondos", "monto_préstamos", "ventas_anuales", "costos_deventas", 
+                "costos_administrativos", "costos_financieros", "activos_corrientes", "activos_fijos", 
+                "pasivos", "capital_propio", "retraso_pago"
             ])
             
             # 必要な列を抽出
             df_empresas["Uso_fondos"] = df_empresas["Uso_fondos"].apply(lambda x: 1 if x == "Capital de trabajo" else 0)
             df_empresas = df_empresas[[
-                "ID", "Nombre", "Uso_fondos", "monto_préstamos", "Capital_propio", "Retraso_pago"
+                "id", "nombre", "uso_fondos", "monto_préstamos", "retraso_pago"
             ]]
             
             # 財務指標を確認
@@ -349,7 +349,7 @@ elif opcion == "Analizar moras":
         todas_empresas = obtener_todas_empresas(conn)
         if todas_empresas:
             df = pd.DataFrame(todas_empresas, columns=[
-                "id", "Nombre", "sector", "uso_fondos", "monto_préstamos", "ventas_anuales", "costos_deventas", 
+                "id", "nombre", "sector", "uso_fondos", "monto_préstamos", "ventas_anuales", "costos_deventas", 
                 "costos_administrativos", "costos_financieros", "activos_corrientes", "activos_fijos", 
                 "pasivos", "capital_propio", "retraso_pago"
             ])
