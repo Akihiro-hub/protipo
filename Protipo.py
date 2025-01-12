@@ -314,16 +314,16 @@ elif opcion == "Analizar moras":
             
             # 財務指標を確認
             df_empresas["Times Interest Earned"] = (
-                (df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"])
-                / df_empresas["Costos_financieros"]
+                (df_empresas["ventas_anuales"] - df_empresas["costos_deventas"] - df_empresas["costos_administrativos"])
+                / df_empresas["costos_financieros"]
             )
             df_empresas["Operación beneficio (%)"] = (
-                ((df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"]) 
-                 / df_empresas["Ventas_anuales"]) * 100
+                ((df_empresas["ventas_anuales"] - df_empresas["costos_deventas"] - df_empresas["costos_administrativos"]) 
+                 / df_empresas["ventas_anuales"]) * 100
             )
             df_empresas["Seguridad margen (%)"] = (
-                ((df_empresas["Ventas_anuales"] - (df_empresas["Costos_administrativos"] + df_empresas["Costos_financieros"])) 
-                 / df_empresas["Ventas_anuales"]) * 100
+                ((df_empresas["ventas_anuales"] - (df_empresas["costos_administrativos"] + df_empresas["costos_financieros"])) 
+                 / df_empresas[ventas_anuales"]) * 100
             )
             
             st.write("### Lista de PyMEs registradas")
