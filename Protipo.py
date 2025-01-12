@@ -256,7 +256,8 @@ elif opcion == "Analizar información PyME":
                     # 損益分岐点の売上を計算
                     breakeven_sales = (costos_administrativos + costos_financieros) / (1 - variable_ratio)
             
-                    st.write(f"Posible monto de ventas anuales en el punto de equilibrio: {breakeven_sales:.2f} Lps")
+                    st.write(f"Posible monto de ventas anuales en el punto de equilibrio: {breakeven_sales:.1f} Lps")
+                    st.write(f"Ratio de margen de seguridad: {(ventas_anuales-breakeven_sales)/ventas_anuales:.1f} Lps")
             
                     # 損益分岐点のグラフを描画
                     fig, ax = plt.subplots()
@@ -271,7 +272,7 @@ elif opcion == "Analizar información PyME":
                     ax.set_xlabel("Ventas (Lps)")
                     ax.set_ylabel("Costos y ventas (Lps)")
                     
-                    ax.axvline(breakeven_sales, color='red', linestyle='--', label=f"Punto de equilibrio: {breakeven_sales:.2f} Lps")
+                    ax.axvline(breakeven_sales, color='red', linestyle='--', label=f"Punto de equilibrio: {breakeven_sales:.1f} Lps")
                     
                     ax.fill_between(sales_range, total_costs, sales_range, where=[s > breakeven_sales for s in sales_range], color='skyblue', alpha=0.3, interpolate=True)
                     
