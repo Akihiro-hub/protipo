@@ -77,11 +77,11 @@ conn = init_db()
 # サイドバーの選択ボックス
 opcion = st.sidebar.selectbox("Seleccionar pantalla", [
     "Ingresar datos de PyME",
-    "Analizar la información PyME"
+    "Analizar información PyME"
 ])
 
-if opcion == "Ingresar información de la empresa":
-    st.header("Ingresar información de la empresa")
+if opcion == "Ingresar datos de PyME":
+    st.header("Ingresar datos de PyME solicitante")
     
     # 最新の企業IDを取得
     cursor = conn.cursor()
@@ -156,8 +156,8 @@ if opcion == "Ingresar información de la empresa":
         conn.commit()
         st.success("Todos los datos han sido eliminados.")
 
-elif opcion == "Buscar información de la empresa":
-    st.header("Buscar información de la empresa")
+elif opcion == "Analizar información PyME":
+    st.header("Analizar situación financiera de PyME solicitante")
 
     # 検索フォーム
     empresa_id = st.number_input("Ingrese el número de la empresa", min_value=1, step=1)
