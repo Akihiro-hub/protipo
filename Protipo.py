@@ -293,3 +293,109 @@ elif opcion == "Analizar información PyME":
 
 elif opcion == "Analizar moras":
     st.header("Analizar moras")
+
+    # ボタン押下で全企業データを表示
+    if st.button("Mostrar todas PyMEs registradas"):
+        todas_empresas = obtener_todas_empresas(conn)
+        
+        if todas_empresas:
+            # データフレーム作成
+            df_empresas = pd.DataFrame(todas_empresas, columns=[
+                "ID", "Nombre", "Sector", "Uso_fondos", "monto_préstamos", "Ventas_anuales", "Costos_deventas", 
+                "Costos_administrativos", "Costos_financieros", "Activos_corrientes", "Activos_fijos", 
+                "Pasivos", "Capital_propio", "Retraso_pago"
+            ])
+            
+            # 必要な列を抽出
+            df_empresas["Uso_fondos"] = df_empresas["Uso_fondos"].apply(lambda x: 1 if x == "Capital de trabajo" else 0)
+            df_empresas = df_empresas[[
+                "ID", "Nombre", "Uso_fondos", "monto_préstamos", "Capital_propio", "Retraso_pago"
+            ]]
+            
+            # 財務指標を追加計算
+            df_empresas["Times interest earned"] = (
+                (df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"]) 
+                / (df_empresas["Costos_financieros"] + 1e-6)
+            )
+            df_empresas["Operating margin (%)"] = (
+                ((df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"]) 
+                 / df_empresas["Ventas_anuales"]) * 100
+            )
+            df_empresas["Safety margin (%)"] = (
+                ((df_empresas["Ventas_anuales"] - 
+                  (df_empresas["Costos_deventas"] + df_empresas["Costos_administrativos"])) / df_empresas["Ventas_anuales"]) * 100
+            )
+            
+            st.write("### Lista de PyMEs registradas")
+            st.dataframe(df_empresas)
+
+        else:
+            st.error("No hay empresas registradas en la base de datos.")
+
+    # 支払い遅延予測
+    st.subheader("Predicción de mora con SVM")
+    
+    # 入力フィールドの設定
+    uso_fondos = st.selectbox("Uso de fondos (1=Capital de trabajo, 0=Otro)", [1, 0])
+    monto_préstamos = st.slider("Monto de préstamo (Lps)", 10000, 10000000, step=10000)
+    capital_propio = st.slider("Razón de capital propio (%)", 1, 100)
+    times_interest_earned = st.slider("Times interest earned (veces)", 0.5, 5.0, step=0.1)
+    operating_margin = st.slider("Margen operativo (%)", 0.0, 50.0, step=0.5)
+    safety_margin = st.slider("Margen de seguridad (%)", 0.0, 50.0, step=0.5)
+    
+    # モデルのトレーニングと予測
+    if st.button("Predecir mora"):
+        # データフレーム作成
+        todas_empresas = obtener_todas_empresas(conn)
+        if todas_empresas:
+            df = pd.DataFrame(todas_empresas, columns=[
+                "ID", "Nombre", "Sector", "Uso_fondos", "monto_préstamos", "Ventas_anuales", "Costos_deventas", 
+                "Costos_administrativos", "Costos_financieros", "Activos_corrientes", "Activos_fijos", 
+                "Pasivos", "Capital_propio", "Retraso_pago"
+            ])
+            
+            df["Uso_fondos"] = df["Uso_fondos"].apply(lambda x: 1 if x == "Capital de trabajo" else 0)
+            df["Times interest earned"] = (
+                (df["Ventas_anuales"] - df["Costos_deventas"] - df["Costos_administrativos"]) 
+                / (df["Costos_financieros"] + 1e-6)
+            )
+            df["Operating margin"] = (
+                ((df["Ventas_anuales"] - df["Costos_deventas"] - df["Costos_administrativos"]) / df["Ventas_anuales"]) * 100
+            )
+            df["Safety margin"] = (
+                ((df["Ventas_anuales"] - 
+                  (df["Costos_deventas"] + df["Costos_administrativos"])) / df["Ventas_anuales"]) * 100
+            )
+            
+            # 必要な列を選択
+            features = df[["Uso_fondos", "monto_préstamos", "Capital_propio", "Times interest earned", "Operating margin", "Safety margin"]]
+            target = df["Retraso_pago"]
+            
+            # SVMモデルのトレーニング
+            from sklearn.svm import SVC
+            from sklearn.model_selection import train_test_split
+            from sklearn.preprocessing import StandardScaler
+            
+            X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
+            scaler = StandardScaler()
+            X_train_scaled = scaler.fit_transform(X_train)
+            X_test_scaled = scaler.transform(X_test)
+            
+            model = SVC(probability=True, random_state=42)
+            model.fit(X_train_scaled, y_train)
+            
+            # 入力データのスケーリング
+            input_data = scaler.transform([[uso_fondos, monto_préstamos, capital_propio, times_interest_earned, operating_margin, safety_margin]])
+            
+            # 予測結果
+            prediction = model.predict(input_data)
+            prediction_prob = model.predict_proba(input_data)[0][1]
+            
+            # 結果の表示
+            if prediction[0] == 1:
+                st.error(f"**Predicción:** Hay alta probabilidad de mora ({prediction_prob:.2%}).")
+            else:
+                st.success(f"**Predicción:** Baja probabilidad de mora ({prediction_prob:.2%}).")
+
+
+
