@@ -323,7 +323,7 @@ elif opcion == "Analizar moras":
             )
             df_empresas["Seguridad margen (%)"] = (
                 ((df_empresas["ventas_anuales"] - (df_empresas["costos_administrativos"] + df_empresas["costos_financieros"])) 
-                 / df_empresas[ventas_anuales"]) * 100
+                 / df_empresas["ventas_anuales"]) * 100
             )
             
             st.write("### Lista de PyMEs registradas")
