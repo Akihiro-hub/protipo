@@ -67,10 +67,7 @@ def calcular_indicadores(activos_corrientes, activos_fijos, pasivos, capital_pro
     razon_corriente = activos_corrientes / pasivos
     razon_capital_propio = capital_propio / total_activos
     return razon_corriente, razon_capital_propio
-
-# Streamlitアプリの開始
-st.title("Sistema de Gestión de Información para Créditos a PyMEs")
-
+    
 # データベースの初期化
 conn = init_db()
 
@@ -81,6 +78,8 @@ opcion = st.sidebar.selectbox("Seleccionar pantalla", [
 ])
 
 if opcion == "Ingresar datos de PyME":
+    # Streamlitアプリの開始
+    st.title("Sistema de Gestión de Información para Créditos a PyMEs")
     st.header("Ingresar datos de PyME solicitante")
     
     # 最新の企業IDを取得
@@ -157,39 +156,43 @@ if opcion == "Ingresar datos de PyME":
         st.success("Todos los datos han sido eliminados.")
 
 elif opcion == "Analizar información PyME":
-    st.header("Analizar situación financiera de PyME solicitante")
+    st.header("Analizar la PyME solicitante")
 
     # 検索フォーム
-    empresa_id = st.number_input("Ingrese el número de la empresa", min_value=1, step=1)
+    empresa_id = st.number_input("Ingrese el código de la empresa", min_value=1, step=1)
     buscar = st.button("Buscar")
 
     if buscar:
         empresa = buscar_empresa_por_id(conn, empresa_id)
 
         if empresa:
-            st.subheader("Información de la empresa")
-            st.write(f"**Nombre:** {empresa[1]}")
-            st.write(f"**Sector:** {empresa[2]}")
-            st.write(f"**Uso de fondos:** {empresa[3]}")
+            col1, col2 = st.columns(2)  # 2列を作成
+            
+            with col1:
+                st.subheader("Información de PyME")
+                st.write(f"**Nombre:** {empresa[1]}")
+                st.write(f"**Sector:** {empresa[2]}")
+                st.write(f"**Uso de fondos:** {empresa[3]}")
 
-            # 財務分析の計算
-            razon_corriente, razon_capital_propio = calcular_indicadores(
-                empresa[4], empresa[5], empresa[6], empresa[7]
-            )
-
-            # 全企業の平均値を計算
-            todas_empresas = obtener_todas_empresas(conn)
-
-            df_empresas = pd.DataFrame(todas_empresas, columns=[
-                "ID", "Nombre", "Sector", "Uso_fondos", "monto_préstamos", "Ventas_anuales", "Costos_deventas", "Costos_administrativos",
-                "Costos_financieros", "Activos_corrientes", "Activos_fijos", "Pasivos", "Capital_propio", "Retraso_pago"
-            ])
-
-            promedio_corriente = (df_empresas["Activos_corrientes"] / df_empresas["Pasivos"]).mean()
-            promedio_capital_propio = (df_empresas["Capital_propio"] / (df_empresas["Activos_corrientes"] + df_empresas["Activos_fijos"])).mean()
-
-            st.subheader("Resultados financieros")
-            st.write(f"**Razón corriente:** {razon_corriente:.2f} (Promedio: {promedio_corriente:.2f})")
-            st.write(f"**Razón de capital propio:** {razon_capital_propio:.2f} (Promedio: {promedio_capital_propio:.2f})")
+                # 財務分析の計算
+                razon_corriente, razon_capital_propio = calcular_indicadores(
+                    empresa[4], empresa[5], empresa[6], empresa[7]
+                )
+    
+                # 全企業の平均値を計算
+                todas_empresas = obtener_todas_empresas(conn)
+    
+                df_empresas = pd.DataFrame(todas_empresas, columns=[
+                    "ID", "Nombre", "Sector", "Uso_fondos", "monto_préstamos", "Ventas_anuales", "Costos_deventas", "Costos_administrativos",
+                    "Costos_financieros", "Activos_corrientes", "Activos_fijos", "Pasivos", "Capital_propio", "Retraso_pago"
+                ])
+    
+                promedio_corriente = (df_empresas["Activos_corrientes"] / df_empresas["Pasivos"]).mean()
+                promedio_capital_propio = (df_empresas["Capital_propio"] / (df_empresas["Activos_corrientes"] + df_empresas["Activos_fijos"])).mean()
+                
+            with col2:
+                st.subheader("Resultados financieros")
+                st.write(f"**Razón corriente:** {razon_corriente:.2f} (Promedio: {promedio_corriente:.2f})")
+                st.write(f"**Razón de capital propio:** {razon_capital_propio:.2f} (Promedio: {promedio_capital_propio:.2f})")
         else:
             st.error("No se encontró la empresa con el ID especificado.")
