@@ -27,12 +27,6 @@ def init_db():
     conn.commit()
     return conn
 
-
-import os
-if os.path.exists("empresa_db.sqlite"):
-    os.remove("empresa_db.sqlite")  # 古いデータベースを削除
-conn = init_db()  # 新しいデータベースを作成
-
 # データを挿入
 def insertar_empresa(conn, datos):
     cursor = conn.cursor()
