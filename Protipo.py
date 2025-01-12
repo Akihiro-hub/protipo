@@ -232,7 +232,7 @@ elif opcion == "Analizar información PyME":
                 # Warnings
                 if operating_income_margin <= 0.05:
                     st.warning("La rentabilidad del negocio puede ser baja.")
-                if times_interest_earned <= 1.3 or razon_capital_propio <= 0.4:
+                if times_interest_earned <= 1.3 or razon_capital_propio <= 35:
                     st.warning("El negocio puede estar altamente endeudado, considerando su nivel de ganancias o nivel del capital propio.")
 
             # 損益分岐点分析
