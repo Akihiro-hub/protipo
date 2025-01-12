@@ -107,7 +107,7 @@ if opcion == "Ingresar datos de PyME":
                 "Capital de trabajo", "Capital de inversión"
             ])
             monto_préstamos = st.number_input("monto aprobado del crédito", min_value=0, step=1)
-            retraso_pago = st.checkbox("¿Hubo demora en el pago? (marcar en el proceso de seguimiento")
+            retraso_pago = st.checkbox("¿Hubo demora en pagos? (marcar al seguimiento")
  
         # 2列目
         with col2:
@@ -157,7 +157,7 @@ if opcion == "Ingresar datos de PyME":
         st.success("Todos los datos han sido eliminados.")
 
 elif opcion == "Analizar información PyME":
-    st.header("Analizar la PyME solicitante")
+    st.header("Analizar PyME solicitante (Dashboard)")
 
     # 検索フォーム
     empresa_id = st.number_input("Ingrese el código de la empresa", min_value=1, step=1)
