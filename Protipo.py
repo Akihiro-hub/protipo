@@ -297,7 +297,7 @@ elif opcion == "Analizar moras":
     st.write("La estimacion se realiza por SVM, un método de aprendisaje automatico, en base a las PyMEs registrados en base de datos. Como esta herramienta es prototipo, no se presenta cifra analizada sino cifra seleccionada al azar.")
     
     # 入力フィールドの設定
-    uso_fondos = st.selectbox("Uso de fondos (1=Capital de trabajo, 0=Otro)", [1, 0])
+    uso_fondos = st.selectbox("Uso de fondos (1=Capital de trabajo, 0=Inversion)", [1, 0])
     monto_préstamos = st.slider("Monto de préstamo (Lps)", 10000, 10000000, step=10000)
     capital_propio = st.slider("Razón de capital propio (%)", 1, 100)
     times_interest_earned = st.slider("Times interest earned (veces)", 0.5, 5.0, step=0.1)
@@ -316,56 +316,56 @@ elif opcion == "Analizar moras":
             st.success(f"**Predicción:** Baja probabilidad de mora ({prediction_prob:.2f}%).")
 
         # データフレーム作成
-        todas_empresas = obtener_todas_empresas(conn)
-        if todas_empresas:
-            df = pd.DataFrame(todas_empresas, columns=[
+        # todas_empresas = obtener_todas_empresas(conn)
+        # if todas_empresas:
+            # df = pd.DataFrame(todas_empresas, columns=[
                 "id", "nombre", "sector", "uso_fondos", "monto_préstamos", "ventas_anuales", "costos_deventas", 
                 "costos_administrativos", "costos_financieros", "activos_corrientes", "activos_fijos", 
                 "pasivos", "capital_propio", "retraso_pago"
             ])
             
-            df["Uso_fondos"] = df["Uso_fondos"].apply(lambda x: 1 if x == "Capital de trabajo" else 0)
-            df["Times interest earned"] = (
-                (df["Ventas_anuales"] - df["Costos_deventas"] - df["Costos_administrativos"]) 
+            # df["uso_fondos"] = df["Uso_fondos"].apply(lambda x: 1 if x == "capital de trabajo" else 0)
+            # df["times interest earned"] = (
+                (df["ventas_anuales"] - df["Costos_deventas"] - df["costos_administrativos"]) 
                 / (df["Costos_financieros"] + 1e-6)
             )
-            df["Operating margin"] = (
-                ((df["Ventas_anuales"] - df["Costos_deventas"] - df["Costos_administrativos"]) / df["Ventas_anuales"]) * 100
+            # df["Operating margin"] = (
+                ((df["Ventas_anuales"] - df["costos_deventas"] - df["costos_administrativos"]) / df["ventas_anuales"]) * 100
             )
-            df["Safety margin"] = (
-                ((df["Ventas_anuales"] - 
-                  (df["Costos_deventas"] + df["Costos_administrativos"])) / df["Ventas_anuales"]) * 100
+            # df["Safety margin"] = (
+                ((df["ventas_anuales"] - 
+                  (df["costos_deventas"] + df["costos_administrativos"])) / df["ventas_anuales"]) * 100
             )
             
             # 必要な列を選択
-            features = df[["uso_fondos", "monto_préstamos", "Times interest earned", "Operating margin", "Safety margin"]]
-            target = df["retraso_pago"]
+            # features = df[["uso_fondos", "monto_préstamos", "Times interest earned", "Operating margin", "Safety margin"]]
+            # target = df["retraso_pago"]
             
             # SVMモデルのトレーニング
-            from sklearn.svm import SVC
-            from sklearn.model_selection import train_test_split
-            from sklearn.preprocessing import StandardScaler
+            # from sklearn.svm import SVC
+            # from sklearn.model_selection import train_test_split
+            # from sklearn.preprocessing import StandardScaler
             
-            X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
-            scaler = StandardScaler()
-            X_train_scaled = scaler.fit_transform(X_train)
-            X_test_scaled = scaler.transform(X_test)
+            # X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
+            # scaler = StandardScaler()
+            # X_train_scaled = scaler.fit_transform(X_train)
+            # X_test_scaled = scaler.transform(X_test)
             
-            model = SVC(probability=True, random_state=42)
-            model.fit(X_train_scaled, y_train)
+            # model = SVC(probability=True, random_state=42)
+            # model.fit(X_train_scaled, y_train)
             
             # 入力データのスケーリング
-            input_data = scaler.transform([[uso_fondos, monto_préstamos, capital_propio, times_interest_earned, operating_margin, safety_margin]])
+            # input_data = scaler.transform([[uso_fondos, monto_préstamos, capital_propio, times_interest_earned, operating_margin, safety_margin]])
             
             # 予測結果
-            prediction = model.predict(input_data)
-            prediction_prob = model.predict_proba(input_data)[0][1]
+            # prediction = model.predict(input_data)
+            # prediction_prob = model.predict_proba(input_data)[0][1]
             
             # 結果の表示
-            #if prediction[0] == 1:
-                #st.error(f"**Predicción:** Hay alta probabilidad de mora ({prediction_prob:.2%}).")
-            #else:
-                #st.success(f"**Predicción:** Baja probabilidad de mora ({prediction_prob:.2%}).")
+            # if prediction[0] == 1:
+                # st.error(f"**Predicción:** Hay alta probabilidad de mora ({prediction_prob:.2%}).")
+            # else:
+                # st.success(f"**Predicción:** Baja probabilidad de mora ({prediction_prob:.2%}).")
  
 
 
