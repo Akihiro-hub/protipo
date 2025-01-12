@@ -222,10 +222,17 @@ elif opcion == "Analizar información PyME":
             
             # 結果の表示
             with col2:
-                st.subheader("Resultados del análisis financiero")
-                st.write(f"**Razón de veces que se cubre el interés (TIE):** {times_interest_earned:.1f} Veces (Promedio: {promedio_tie:.1f} Veces)")
+                st.subheader("Análisis financiero")
+                st.write(f"**Razón de veces cubriendo el interés (TIE):** {times_interest_earned:.1f} veces (Promedio: {promedio_tie:.1f} veces)")
                 st.write(f"**Margen operativo:** {operating_income_margin:.1f}% (Promedio: {promedio_margin:.1f}%)")
                 st.write(f"**Razón de capital propio:** {razon_capital_propio:.1f}% (Promedio: {promedio_capital_propio:.1f}%)")
+
+                # Warnings
+                if operating_income_margin <= 0.05:
+                    st.warning("La rentabilidad del negocio puede ser baja.")
+                if times_interest_earned <= 1 or razon_capital_propio <= 0.4:
+                    st.warning("El negocio puede estar altamente endeudado, considerando su nivel de ganancias o nivel del capital propio.")
+
 
         else:
             st.error("No se encontró la empresa con el ID especificado.")
