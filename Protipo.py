@@ -328,11 +328,6 @@ elif opcion == "Analizar moras":
             
             st.write("### Lista de PyMEs registradas")
             st.dataframe(df_empresas)
-
-                
-                operating_income_margin = ((ventas_anuales - costos_deventas - costos_administrativos) / ventas_anuales) * 100
-                razon_capital_propio = (capital_propio / total_activos) * 100
-
         
         else:
             st.error("No hay empresas registradas en la base de datos.")
