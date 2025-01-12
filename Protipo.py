@@ -237,6 +237,12 @@ elif opcion == "Analizar información PyME":
             # 損益分岐点分析
             st.write("#### :green[Resultado del análisis del punto de equilibrio]")
             st.write("Se presentan abajo el resultado del análisis del punto de equilibrio, aunque el mismo podrá ser impreciso, suponiendo que costos de venta se clasifican en costos variables y los otros costos en fijos.")
+
+            # empresaからデータを取得
+            ventas_anuales = empresa[5] or 0  # ventas_anualesは6番目の列
+            costos_deventas = empresa[6] or 0  # costos_deventasは7番目の列
+            costos_administrativos = empresa[7] or 0  # costos_administrativos
+            costos_financieros = empresa[8] or 0  # costos_financieros
             
             # 安全対策：ゼロ除算とNone値のチェック
             if ventas_anuales == 0 or costos_deventas is None or ventas_anuales is None:
