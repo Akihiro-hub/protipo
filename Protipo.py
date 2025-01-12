@@ -307,7 +307,7 @@ elif opcion == "Analizar moras":
             ])
             
             # 必要な列を抽出
-            df_empresas["Uso_fondos"] = df_empresas["Uso_fondos"].apply(lambda x: 1 if x == "Capital de trabajo" else 0)
+            df_empresas["uso_fondos"] = df_empresas["uso_fondos"].apply(lambda x: 1 if x == "Capital de trabajo" else 0)
             df_empresas = df_empresas[[
                 "id", "nombre", "uso_fondos", "monto_préstamos", "retraso_pago"
             ]]
