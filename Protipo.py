@@ -34,9 +34,13 @@ def insertar_empresa(conn, datos):
         INSERT INTO empresas (
             nombre, sector, uso_fondos, monto_préstamos, ventas_anuales, costos_deventas, costos_administrativos, 
             costos_financieros, activos_corrientes, activos_fijos, pasivos, capital_propio, retraso_pago
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, datos)
     conn.commit()
+
+#　データを一旦削除する場合
+cursor.execute("DROP TABLE IF EXISTS empresas")
+conn.commit()
 
 # データを検索
 def buscar_empresa_por_id(conn, empresa_id):
