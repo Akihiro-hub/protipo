@@ -293,8 +293,8 @@ elif opcion == "Analizar información PyME":
             st.error("No se encontró la empresa con el ID especificado.")
 
 elif opcion == "Analizar moras":
-    st.header("Analizar moras")
-    st.subheader("Predicción de mora con SVM")
+    st.header("Estimar la probabilidad de mora por IA")
+    st.write("La estimacion se realiza por SVM, un método de aprendisaje automatico, en base a las PyMEs registrados en base de datos. Como esta herramienta es prototipo, no se presenta cifra analizada sino cifra seleccionada al azar.)
     
     # 入力フィールドの設定
     uso_fondos = st.selectbox("Uso de fondos (1=Capital de trabajo, 0=Otro)", [1, 0])
@@ -314,9 +314,6 @@ elif opcion == "Analizar moras":
             st.error(f"**Predicción:** Hay alta probabilidad de mora ({prediction_prob:.2f}%).")
         else:  # 低い確率（例: 12%未満の場合に成功表示）
             st.success(f"**Predicción:** Baja probabilidad de mora ({prediction_prob:.2f}%).")
-    
-        # メッセージを個別に表示
-        st.write(f"La probabilidad de ocurrencia de mora es: {prediction_prob:.2f}%.")
 
         # データフレーム作成
         todas_empresas = obtener_todas_empresas(conn)
@@ -365,10 +362,10 @@ elif opcion == "Analizar moras":
             prediction_prob = model.predict_proba(input_data)[0][1]
             
             # 結果の表示
-            if prediction[0] == 1:
-                st.error(f"**Predicción:** Hay alta probabilidad de mora ({prediction_prob:.2%}).")
-            else:
-                st.success(f"**Predicción:** Baja probabilidad de mora ({prediction_prob:.2%}).")
+            #if prediction[0] == 1:
+                #st.error(f"**Predicción:** Hay alta probabilidad de mora ({prediction_prob:.2%}).")
+            #else:
+                #st.success(f"**Predicción:** Baja probabilidad de mora ({prediction_prob:.2%}).")
  
 
 
