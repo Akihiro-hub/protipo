@@ -318,24 +318,12 @@ elif opcion == "Analizar moras":
         # データフレーム作成
         # todas_empresas = obtener_todas_empresas(conn)
         # if todas_empresas:
-            # df = pd.DataFrame(todas_empresas, columns=[
-                "id", "nombre", "sector", "uso_fondos", "monto_préstamos", "ventas_anuales", "costos_deventas", 
-                "costos_administrativos", "costos_financieros", "activos_corrientes", "activos_fijos", 
-                "pasivos", "capital_propio", "retraso_pago"
-            ])
+            # df = pd.DataFrame(todas_empresas, columns=["id", "nombre", "sector", "uso_fondos", "monto_préstamos", "ventas_anuales", "costos_deventas", "costos_administrativos", "costos_financieros", "activos_corrientes", "activos_fijos", "pasivos", "capital_propio", "retraso_pago"])
             
             # df["uso_fondos"] = df["Uso_fondos"].apply(lambda x: 1 if x == "capital de trabajo" else 0)
-            # df["times interest earned"] = (
-                (df["ventas_anuales"] - df["Costos_deventas"] - df["costos_administrativos"]) 
-                / (df["Costos_financieros"] + 1e-6)
-            )
-            # df["Operating margin"] = (
-                ((df["Ventas_anuales"] - df["costos_deventas"] - df["costos_administrativos"]) / df["ventas_anuales"]) * 100
-            )
-            # df["Safety margin"] = (
-                ((df["ventas_anuales"] - 
-                  (df["costos_deventas"] + df["costos_administrativos"])) / df["ventas_anuales"]) * 100
-            )
+            # df["times interest earned"] = ((df["ventas_anuales"] - df["Costos_deventas"] - df["costos_administrativos"]) / (df["Costos_financieros"] + 1e-6))
+            # df["Operating margin"] = ( ((df["Ventas_anuales"] - df["costos_deventas"] - df["costos_administrativos"]) / df["ventas_anuales"]) * 100)
+            # df["Safety margin"] = (((df["ventas_anuales"] -  (df["costos_deventas"] + df["costos_administrativos"])) / df["ventas_anuales"]) * 100)
             
             # 必要な列を選択
             # features = df[["uso_fondos", "monto_préstamos", "Times interest earned", "Operating margin", "Safety margin"]]
