@@ -6,6 +6,10 @@ import pandas as pd
 def init_db():
     conn = sqlite3.connect("empresa_db.sqlite")
     cursor = conn.cursor()
+
+    # テーブルを削除して再作成する場合
+    cursor.execute("DROP TABLE IF EXISTS empresas")
+
     cursor.execute(""" 
         CREATE TABLE IF NOT EXISTS empresas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,9 +42,6 @@ def insertar_empresa(conn, datos):
     """, datos)
     conn.commit()
 
-#　データを一旦削除する場合
-cursor.execute("DROP TABLE IF EXISTS empresas")
-conn.commit()
 
 # データを検索
 def buscar_empresa_por_id(conn, empresa_id):
