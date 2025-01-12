@@ -258,7 +258,7 @@ elif opcion == "Analizar información PyME":
                     margen_seguridad = ((ventas_anuales-breakeven_sales)/ventas_anuales)/100
             
                     st.write(f"Posible monto de ventas anuales en el punto de equilibrio: {breakeven_sales:.1f} Lps")
-                    st.write(f"Ratio de margen de seguridad: {margem_seguridad:.1f} %")
+                    st.write(f"Ratio de margen de seguridad: {margen_seguridad:.1f} %")
             
                     # 損益分岐点のグラフを描画
                     fig, ax = plt.subplots()
