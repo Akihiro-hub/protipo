@@ -12,6 +12,7 @@ def init_db():
             nombre TEXT,
             sector TEXT,
             uso_fondos TEXT,
+            monto_préstamos REAL,
             ventas_anuales REAL,
             costos_deventas REAL,
             costos_administrativos REAL, 
@@ -31,7 +32,8 @@ def insertar_empresa(conn, datos):
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO empresas (
-            nombre, sector, uso_fondos, ventas_anuales, costos_deventas, costos_administrativos, costos_financieros, activos_corrientes, activos_fijos, pasivos, capital_propio, retraso_pago
+            nombre, sector, uso_fondos, monto_préstamos, ventas_anuales, costos_deventas, costos_administrativos, 
+            costos_financieros, activos_corrientes, activos_fijos, pasivos, capital_propio, retraso_pago
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, datos)
     conn.commit()
@@ -92,16 +94,18 @@ if opcion == "Ingresar información de la empresa":
         # 1列目
         with col1:
             nombre = st.text_input("Nombre de la empresa")
-            ventas_anuales = st.number_input("Ventas anuales", min_value=0, step=1)
-            costos_deventas = st.number_input("Costos de ventas", min_value=0, step=1)
-            costos_administrativos = st.number_input("Costos administrativos", min_value=0, step=1)
-            costos_financieros = st.number_input("Costos financieros", min_value=0, step=1)
-    
-        # 2列目
-        with col2:
             sector = st.selectbox("Sector de la empresa", [
                 "Carpintería", "Comedor", "Corte y confección", "Panadería", "Herrería", "Comercio", "Otros"
             ])
+            uso_fondos = st.selectbox("Uso de los fondos", [
+                "Capital de trabajo", "Capital de inversión"
+            ])
+            monto_préstamos = st.number_input("monto aprobado del crédito", min_value=0, step=1)
+            retraso_pago = st.checkbox("¿Hubo demora en el pago?")
+ 
+        # 2列目
+        with col2:
+            st.write("###### :blue[Balance General]") 
             activos_corrientes = st.number_input("Activos corrientes", min_value=0, step=1)
             activos_fijos = st.number_input("Activos fijos", min_value=0, step=1)
             pasivos = st.number_input("Pasivos", min_value=0, step=1)
@@ -109,11 +113,12 @@ if opcion == "Ingresar información de la empresa":
     
         # 3列目
         with col3:
-            uso_fondos = st.selectbox("Uso de los fondos", [
-                "Capital de trabajo", "Capital de inversión"
-            ])
-            retraso_pago = st.checkbox("¿Hubo retrasos en el pago?")
-    
+            st.write("###### :blue[Estado de Resultadosl]") 
+            ventas_anuales = st.number_input("Ventas anuales", min_value=0, step=1)
+            costos_deventas = st.number_input("Costos de ventas", min_value=0, step=1)
+            costos_administrativos = st.number_input("Costos administrativos", min_value=0, step=1)
+            costos_financieros = st.number_input("Costos financieros", min_value=0, step=1)
+
         # フォーム送信ボタン
         enviado = st.form_submit_button("Guardar datos")
     
@@ -144,7 +149,6 @@ if opcion == "Ingresar información de la empresa":
         conn.commit()
         st.success("Todos los datos han sido eliminados.")
 
-
 elif opcion == "Buscar información de la empresa":
     st.header("Buscar información de la empresa")
 
@@ -170,7 +174,7 @@ elif opcion == "Buscar información de la empresa":
             todas_empresas = obtener_todas_empresas(conn)
 
             df_empresas = pd.DataFrame(todas_empresas, columns=[
-                "ID", "Nombre", "Sector", "Uso_fondos", "Ventas_anuales", "Costos_deventas", "Costos_administrativos",
+                "ID", "Nombre", "Sector", "Uso_fondos", "monto_préstamos", "Ventas_anuales", "Costos_deventas", "Costos_administrativos",
                 "Costos_financieros", "Activos_corrientes", "Activos_fijos", "Pasivos", "Capital_propio", "Retraso_pago"
             ])
 
