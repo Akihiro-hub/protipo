@@ -368,8 +368,8 @@ elif opcion == "Analizar moras":
             )
             
             # 必要な列を選択
-            features = df[["Uso_fondos", "monto_préstamos", "Capital_propio", "Times interest earned", "Operating margin", "Safety margin"]]
-            target = df["Retraso_pago"]
+            features = df[["uso_fondos", "monto_préstamos", "Times interest earned", "Operating margin", "Safety margin"]]
+            target = df["retraso_pago"]
             
             # SVMモデルのトレーニング
             from sklearn.svm import SVC
