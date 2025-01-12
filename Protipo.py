@@ -261,7 +261,7 @@ elif opcion == "Analizar información PyME":
                     st.write(f"Ratio de margen de seguridad: {margen_seguridad:.1f} %")
 
                     # Warnings
-                    if operating_income_margin <= 0.1:
+                    if margen_seguridad <= 0.1:
                     st.warning("La rentabilidad del negocio puede ser baja, considerando su margen de seguridad.")
             
                     # 損益分岐点のグラフを描画
