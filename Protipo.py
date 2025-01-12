@@ -312,23 +312,28 @@ elif opcion == "Analizar moras":
                 "ID", "Nombre", "Uso_fondos", "monto_préstamos", "Capital_propio", "Retraso_pago"
             ]]
             
-            # 財務指標を追加計算
-            df_empresas["Times interest earned"] = (
-                (df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"]) 
-                / (df_empresas["Costos_financieros"] + 1e-6)
+            # 財務指標を確認
+            df_empresas["Times Interest Earned"] = (
+                (df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"])
+                / df_empresas["Costos_financieros"]
             )
-            df_empresas["Operating margin (%)"] = (
+            df_empresas["Operación beneficio (%)"] = (
                 ((df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"]) 
                  / df_empresas["Ventas_anuales"]) * 100
             )
-            df_empresas["Safety margin (%)"] = (
-                ((df_empresas["Ventas_anuales"] - 
-                  (df_empresas["Costos_deventas"] + df_empresas["Costos_administrativos"])) / df_empresas["Ventas_anuales"]) * 100
+            df_empresas["Seguridad margen (%)"] = (
+                ((df_empresas["Ventas_anuales"] - (df_empresas["Costos_administrativos"] + df_empresas["Costos_financieros"])) 
+                 / df_empresas["Ventas_anuales"]) * 100
             )
             
             st.write("### Lista de PyMEs registradas")
             st.dataframe(df_empresas)
 
+                
+                operating_income_margin = ((ventas_anuales - costos_deventas - costos_administrativos) / ventas_anuales) * 100
+                razon_capital_propio = (capital_propio / total_activos) * 100
+
+        
         else:
             st.error("No hay empresas registradas en la base de datos.")
 
