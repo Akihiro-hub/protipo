@@ -106,7 +106,7 @@ if opcion == "Ingresar datos de PyME":
                 "Capital de trabajo", "Capital de inversión"
             ])
             monto_préstamos = st.number_input("monto aprobado del crédito", min_value=0, step=1)
-            retraso_pago = st.checkbox("¿Hubo demora en el pago?")
+            retraso_pago = st.checkbox("¿Hubo demora en el pago? (marcar en el proceso de seguimiento")
  
         # 2列目
         with col2:
@@ -174,25 +174,58 @@ elif opcion == "Analizar información PyME":
                 st.write(f"**Sector:** {empresa[2]}")
                 st.write(f"**Uso de fondos:** {empresa[3]}")
 
-                # 財務分析の計算
-                razon_corriente, razon_capital_propio = calcular_indicadores(
-                    empresa[4], empresa[5], empresa[6], empresa[7]
-                )
-    
-                # 全企業の平均値を計算
-                todas_empresas = obtener_todas_empresas(conn)
-    
-                df_empresas = pd.DataFrame(todas_empresas, columns=[
-                    "ID", "Nombre", "Sector", "Uso_fondos", "monto_préstamos", "Ventas_anuales", "Costos_deventas", "Costos_administrativos",
-                    "Costos_financieros", "Activos_corrientes", "Activos_fijos", "Pasivos", "Capital_propio", "Retraso_pago"
-                ])
-    
-                promedio_corriente = (df_empresas["Activos_corrientes"] / df_empresas["Pasivos"]).mean()
-                promedio_capital_propio = (df_empresas["Capital_propio"] / (df_empresas["Activos_corrientes"] + df_empresas["Activos_fijos"])).mean()
-                
+            # 財務分析の計算
+            def calcular_indicadores(ventas_anuales, costos_deventas, costos_administrativos, costos_financieros, capital_propio, activos_corrientes, activos_fijos):
+                if costos_financieros == 0:
+                    costos_financieros = 1  # ゼロ除算を防ぐため
+                if ventas_anuales == 0:
+                    ventas_anuales = 1  # ゼロ除算を防ぐため
+                if activos_corrientes + activos_fijos == 0:
+                    total_activos = 1  # ゼロ除算を防ぐため
+                else:
+                    total_activos = activos_corrientes + activos_fijos
+            
+                times_interest_earned = (ventas_anuales - costos_deventas - costos_administrativos) / costos_financieros
+                operating_income_margin = ((ventas_anuales - costos_deventas - costos_administrativos) / ventas_anuales) * 100
+                razon_capital_propio = (capital_propio / total_activos) * 100
+            
+                return times_interest_earned, operating_income_margin, razon_capital_propio
+            
+            
+            # 全企業の平均値を計算
+            todas_empresas = obtener_todas_empresas(conn)
+            
+            df_empresas = pd.DataFrame(todas_empresas, columns=[
+                "ID", "Nombre", "Sector", "Uso_fondos", "monto_préstamos", "Ventas_anuales", "Costos_deventas", "Costos_administrativos",
+                "Costos_financieros", "Activos_corrientes", "Activos_fijos", "Pasivos", "Capital_propio", "Retraso_pago"
+            ])
+            
+            # 各指標の平均値を計算
+            promedio_tie = (
+                (df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"])
+                / df_empresas["Costos_financieros"]
+            ).mean()
+            
+            promedio_margin = (
+                ((df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"])
+                 / df_empresas["Ventas_anuales"]) * 100
+            ).mean()
+            
+            promedio_capital_propio = (
+                (df_empresas["Capital_propio"] / (df_empresas["Activos_corrientes"] + df_empresas["Activos_fijos"])) * 100
+            ).mean()
+            
+            # 現在の企業データに基づく指標を計算
+            times_interest_earned, operating_income_margin, razon_capital_propio = calcular_indicadores(
+                empresa[5], empresa[6], empresa[7], empresa[8], empresa[12], empresa[9], empresa[10]
+            )
+            
+            # 結果の表示
             with col2:
-                st.subheader("Resultados financieros")
-                st.write(f"**Razón corriente:** {razon_corriente:.2f} (Promedio: {promedio_corriente:.2f})")
-                st.write(f"**Razón de capital propio:** {razon_capital_propio:.2f} (Promedio: {promedio_capital_propio:.2f})")
+                st.subheader("Resultados del análisis financiero")
+                st.write(f"**Razón de veces que se cubre el interés (TIE):** {times_interest_earned:.1f} Veces (Promedio: {promedio_tie:.1f} Veces)")
+                st.write(f"**Margen operativo:** {operating_income_margin:.1f}% (Promedio: {promedio_margin:.1f}%)")
+                st.write(f"**Razón de capital propio:** {razon_capital_propio:.1f}% (Promedio: {promedio_capital_propio:.1f}%)")
+
         else:
             st.error("No se encontró la empresa con el ID especificado.")
