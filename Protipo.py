@@ -349,9 +349,9 @@ elif opcion == "Analizar moras":
         todas_empresas = obtener_todas_empresas(conn)
         if todas_empresas:
             df = pd.DataFrame(todas_empresas, columns=[
-                "ID", "Nombre", "Sector", "Uso_fondos", "monto_préstamos", "Ventas_anuales", "Costos_deventas", 
-                "Costos_administrativos", "Costos_financieros", "Activos_corrientes", "Activos_fijos", 
-                "Pasivos", "Capital_propio", "Retraso_pago"
+                "id", "Nombre", "sector", "uso_fondos", "monto_préstamos", "ventas_anuales", "costos_deventas", 
+                "costos_administrativos", "costos_financieros", "activos_corrientes", "activos_fijos", 
+                "pasivos", "capital_propio", "retraso_pago"
             ])
             
             df["Uso_fondos"] = df["Uso_fondos"].apply(lambda x: 1 if x == "Capital de trabajo" else 0)
