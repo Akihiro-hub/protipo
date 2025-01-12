@@ -262,7 +262,7 @@ elif opcion == "Analizar información PyME":
 
                     # Warnings
                     if margen_seguridad <= 0.1:
-                    st.warning("La rentabilidad del negocio puede ser baja, considerando su margen de seguridad.")
+                        st.warning("La rentabilidad del negocio puede ser baja, considerando su margen de seguridad.")
             
                     # 損益分岐点のグラフを描画
                     fig, ax = plt.subplots()
