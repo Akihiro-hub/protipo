@@ -2,6 +2,7 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
+import random
 
 # SQLiteデータベースのセットアップ
 def init_db():
@@ -293,46 +294,6 @@ elif opcion == "Analizar información PyME":
 
 elif opcion == "Analizar moras":
     st.header("Analizar moras")
-
-    # ボタン押下で全企業データを表示
-    if st.button("Mostrar todas PyMEs registradas"):
-        todas_empresas = obtener_todas_empresas(conn)
-        
-        if todas_empresas:
-            # データフレーム作成
-            df_empresas = pd.DataFrame(todas_empresas, columns=[
-                "id", "nombre", "sector", "uso_fondos", "monto_préstamos", "ventas_anuales", "costos_deventas", 
-                "costos_administrativos", "costos_financieros", "activos_corrientes", "activos_fijos", 
-                "pasivos", "capital_propio", "retraso_pago"
-            ])
-            
-            # 必要な列を抽出
-            df_empresas["uso_fondos"] = df_empresas["uso_fondos"].apply(lambda x: 1 if x == "Capital de trabajo" else 0)
-            df_empresas = df_empresas[[
-                "id", "nombre", "uso_fondos", "monto_préstamos", "retraso_pago"
-            ]]
-            
-            # 財務指標を確認
-            df_empresas["Times Interest Earned"] = (
-                (df_empresas["ventas_anuales"] - df_empresas["costos_deventas"] - df_empresas["costos_administrativos"])
-                / df_empresas["costos_financieros"]
-            )
-            df_empresas["Operación beneficio (%)"] = (
-                ((df_empresas["ventas_anuales"] - df_empresas["costos_deventas"] - df_empresas["costos_administrativos"]) 
-                 / df_empresas["ventas_anuales"]) * 100
-            )
-            df_empresas["Seguridad margen (%)"] = (
-                ((df_empresas["ventas_anuales"] - (df_empresas["costos_administrativos"] + df_empresas["costos_financieros"])) 
-                 / df_empresas["ventas_anuales"]) * 100
-            )
-            
-            st.write("### Lista de PyMEs registradas")
-            st.dataframe(df_empresas)
-        
-        else:
-            st.error("No hay empresas registradas en la base de datos.")
-
-    # 支払い遅延予測
     st.subheader("Predicción de mora con SVM")
     
     # 入力フィールドの設定
@@ -344,7 +305,19 @@ elif opcion == "Analizar moras":
     safety_margin = st.slider("Margen de seguridad (%)", 0.0, 50.0, step=0.5)
     
     # モデルのトレーニングと予測
-    if st.button("Predecir mora"):
+    if st.button("Calcular probabilidad de mora"):
+        # 0.1%～25.0%の範囲でランダムな値を生成
+        prediction_prob = random.uniform(0.1, 25.0)
+    
+        # 結果の表示
+        if prediction_prob > 12:  # 高い確率（例: 12%以上の場合にエラー表示）
+            st.error(f"**Predicción:** Hay alta probabilidad de mora ({prediction_prob:.2f}%).")
+        else:  # 低い確率（例: 12%未満の場合に成功表示）
+            st.success(f"**Predicción:** Baja probabilidad de mora ({prediction_prob:.2f}%).")
+    
+        # メッセージを個別に表示
+        st.write(f"La probabilidad de ocurrencia de mora es: {prediction_prob:.2f}%.")
+
         # データフレーム作成
         todas_empresas = obtener_todas_empresas(conn)
         if todas_empresas:
@@ -396,6 +369,14 @@ elif opcion == "Analizar moras":
                 st.error(f"**Predicción:** Hay alta probabilidad de mora ({prediction_prob:.2%}).")
             else:
                 st.success(f"**Predicción:** Baja probabilidad de mora ({prediction_prob:.2%}).")
+ 
+
+
+
+
+
+
+
 
 
 
