@@ -76,8 +76,8 @@ conn = init_db()
 
 # サイドバーの選択ボックス
 opcion = st.sidebar.selectbox("Seleccionar pantalla", [
-    "Ingresar información de la empresa",
-    "Buscar información de la empresa"
+    "Ingresar datos de PyME",
+    "Analizar la información PyME"
 ])
 
 if opcion == "Ingresar información de la empresa":
@@ -98,6 +98,7 @@ if opcion == "Ingresar información de la empresa":
     
         # 1列目
         with col1:
+            st.write("###### :blue[Informacion principal]") 
             nombre = st.text_input("Nombre de la empresa")
             sector = st.selectbox("Sector de la empresa", [
                 "Carpintería", "Comedor", "Corte y confección", "Panadería", "Herrería", "Comercio", "Otros"
