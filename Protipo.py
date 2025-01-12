@@ -128,6 +128,7 @@ if opcion == "Ingresar información de la empresa":
                 nombre,  
                 sector,  
                 uso_fondos,
+                monto_préstamos or 0,
                 ventas_anuales or 0,
                 costos_deventas or 0,
                 costos_administrativos or 0,
