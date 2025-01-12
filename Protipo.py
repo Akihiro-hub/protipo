@@ -43,7 +43,6 @@ def insertar_empresa(conn, datos):
     """, datos)
     conn.commit()
 
-
 # データを検索
 def buscar_empresa_por_id(conn, empresa_id):
     cursor = conn.cursor()
@@ -75,7 +74,8 @@ conn = init_db()
 # サイドバーの選択ボックス
 opcion = st.sidebar.selectbox("Seleccionar pantalla", [
     "Ingresar datos de PyME",
-    "Analizar información PyME"
+    "Analizar información PyME",
+    "Analizar moras"
 ])
 
 if opcion == "Ingresar datos de PyME":
@@ -284,3 +284,6 @@ elif opcion == "Analizar información PyME":
 
         else:
             st.error("No se encontró la empresa con el ID especificado.")
+
+elif opcion == "Analizar moras":
+    st.header("Analizar moras")
