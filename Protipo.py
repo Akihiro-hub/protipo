@@ -238,33 +238,43 @@ elif opcion == "Analizar información PyME":
             st.write("#### :green[Resultado del análisis del punto de equilibrio]")
             st.write("Se presentan abajo el resultado del análisis del punto de equilibrio, aunque el mismo podrá ser impreciso, suponiendo que costos de venta se clasifican en costos variables y los otros costos en fijos.")
             
-            variable_ratio = costos_deventas/ventas_anuales
-            breakeven_sales = (costos_administrativos + costos_financieros) / (1-variable_ratio)
-
-            st.write(f"Posible monto de ventas anuales en el punto de equilibrio: {breakeven_sales:.2f} Lps")
-
-            fig, ax = plt.subplots()
-        
-            sales_range = list(range(int(breakeven_sales * 0.8), int(breakeven_sales * 1.2), 100))
-            total_costs = [costos_administrativos + costos_financieros + (variable_ratio * s) for s in sales_range]
+            # 安全対策：ゼロ除算とNone値のチェック
+            if ventas_anuales == 0 or costos_deventas is None or ventas_anuales is None:
+                st.error("No se puede calcular el punto de equilibrio porque las ventas anuales o los costos de ventas son 0 o no están definidos.")
+            else:
+                # コスト比率を計算
+                variable_ratio = costos_deventas / ventas_anuales
+                if variable_ratio >= 1:
+                    st.error("El punto de equilibrio no puede ser calculado porque los costos variables superan o igualan las ventas anuales.")
+                else:
+                    # 損益分岐点の売上を計算
+                    breakeven_sales = (costos_administrativos + costos_financieros) / (1 - variable_ratio)
             
-            ax.plot(sales_range, total_costs, color='skyblue', label="Costos totales (Costos fijos + Costos variables)", marker='o')
-            ax.plot(sales_range, sales_range, color='orange', label="Ventas", marker='o')
+                    st.write(f"Posible monto de ventas anuales en el punto de equilibrio: {breakeven_sales:.2f} Lps")
             
-            ax.set_title("Estimación del punto de equilibrio")
-            ax.set_xlabel("Ventas (Lps)")
-            ax.set_ylabel("Costos y ventas (Lps)")
+                    # 損益分岐点のグラフを描画
+                    fig, ax = plt.subplots()
+                    
+                    sales_range = list(range(int(breakeven_sales * 0.8), int(breakeven_sales * 1.2), 100))
+                    total_costs = [costos_administrativos + costos_financieros + (variable_ratio * s) for s in sales_range]
+                    
+                    ax.plot(sales_range, total_costs, color='skyblue', label="Costos totales (Costos fijos + Costos variables)", marker='o')
+                    ax.plot(sales_range, sales_range, color='orange', label="Ventas", marker='o')
+                    
+                    ax.set_title("Estimación del punto de equilibrio")
+                    ax.set_xlabel("Ventas (Lps)")
+                    ax.set_ylabel("Costos y ventas (Lps)")
+                    
+                    ax.axvline(breakeven_sales, color='red', linestyle='--', label=f"Punto de equilibrio: {breakeven_sales:.2f} Lps")
+                    
+                    ax.fill_between(sales_range, total_costs, sales_range, where=[s > breakeven_sales for s in sales_range], color='skyblue', alpha=0.3, interpolate=True)
+                    
+                    mid_x = breakeven_sales * 1.1
+                    mid_y = (max(total_costs) + max(sales_range)) / 2
+                    ax.text(mid_x, mid_y, "Ganancia = Área del color azul claro", color="blue", fontsize=7, ha="left")
             
-            ax.axvline(breakeven_sales, color='red', linestyle='--', label=f"Punto de equilibrio: {breakeven_sales:.2f} Lps")
-            
-            ax.fill_between(sales_range, total_costs, sales_range, where=[s > breakeven_sales for s in sales_range], color='skyblue', alpha=0.3, interpolate=True)
-            
-            mid_x = breakeven_sales * 1.1
-            mid_y = (max(total_costs) + max(sales_range)) / 2
-            ax.text(mid_x, mid_y, "Ganancia = Área del color azul claro", color="blue", fontsize=7, ha="left")
-
-            ax.legend()  # Show the legend
-            st.pyplot(fig)
+                    ax.legend()  # Show the legend
+                    st.pyplot(fig)
 
         else:
             st.error("No se encontró la empresa con el ID especificado.")
