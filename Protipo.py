@@ -10,7 +10,7 @@ def init_db():
     cursor = conn.cursor()
 
     # テーブルを削除して再作成する場合
-    # cursor.execute("DROP TABLE IF EXISTS empresas")
+    cursor.execute("DROP TABLE IF EXISTS empresas")
 
     cursor.execute(""" 
         CREATE TABLE IF NOT EXISTS empresas (
