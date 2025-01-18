@@ -42,8 +42,7 @@ def insertar_empresa(conn, datos):
     cursor.execute("""
         INSERT INTO empresas (
             nombre, sector, uso_fondos, no_empleados, ventas_anuales, costos_deventas, costos_administrativos, 
-            costos_financieros, activos_corrientes, activos_fijos, pasivos, capital_propio, monto_préstamos, plazo_préstamos,
-            tasa_préstamos, retraso_pago
+            costos_financieros, activos_corrientes, activos_fijos, pasivos, capital_propio, monto_préstamos, plazo_préstamos, tasa_préstamos, retraso_pago
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, datos)
     conn.commit()
