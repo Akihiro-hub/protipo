@@ -255,7 +255,7 @@ elif opcion == "Analizar PyME":
                 
                 # グラフの作成
                 fig, ax = plt.subplots(figsize=(8, 4))
-                ax.barh(labels, valores, color=["blue", "green"])
+                ax.barh(labels, valores, color=["blue", "green"], height=0.3)
                 ax.set_xlabel("Veces")
                 ax.set_title("Comparación de la rotación de activos totales, como indeicador de eficiencia")
                 ax.grid(axis="x", linestyle="--", alpha=0.7)
