@@ -254,7 +254,7 @@ elif opcion == "Analizar PyME":
                 labels = ["La empresa", "Promedio de empresas"]
                 
                 # グラフの作成
-                fig, ax = plt.subplots(figsize=(8, 4))
+                fig, ax = plt.subplots(figsize=(7, 2))
                 ax.barh(labels, valores, color=["blue", "green"], height=0.3)
                 ax.set_xlabel("Veces")
                 ax.set_title("Comparación de la rotación de activos totales, como indeicador de eficiencia")
