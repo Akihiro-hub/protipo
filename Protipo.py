@@ -95,24 +95,19 @@ if opcion == "Ingresar datos de PyME":
 
     # データ挿入フォーム（3列レイアウト）
     with st.form("empresa_form"):  # フォームの開始
-        col1, col2, col3 = st.columns(3)  # 3列を作成
+        col1, col2, col3, col4 = st.columns(4)  # 3列を作成
     
         # 1列目
         with col1:
-            st.write("###### :blue[Informacion principal]") 
+            st.write("###### :blue[Perfil principal]") 
             nombre = st.text_input("Nombre de la empresa")
-            sector = st.selectbox("Sector de la empresa", [
-                "Carpintería", "Comedor", "Corte y confección", "Panadería", "Herrería", "Comercio", "Otros"
-            ])
-            uso_fondos = st.selectbox("Uso de los fondos", [
-                "Capital de trabajo", "Capital de inversión"
-            ])
-            monto_préstamos = st.number_input("monto aprobado del crédito", min_value=0, step=1)
-            retraso_pago = st.checkbox("¿Hubo demora en pagos? (marcar al seguimiento")
+            sector = st.selectbox("Sector de la empresa", ["Carpintería", "Comedor", "Panadería", "Herrería", "Comercio", "Otros"])
+            uso_fondos = st.selectbox("Uso de fondo solicitado", ["Capital de trabajo", "Capital de inversión"])
+            no_empleados = st.number_input("Número de trabajadores", min_value=0, step=1)
  
         # 2列目
         with col2:
-            st.write("###### :blue[Balance General]") 
+            st.write("###### :blue[Balance General (lps.)]") 
             activos_corrientes = st.number_input("Activos corrientes", min_value=0, step=1)
             activos_fijos = st.number_input("Activos fijos", min_value=0, step=1)
             pasivos = st.number_input("Pasivos", min_value=0, step=1)
@@ -120,12 +115,21 @@ if opcion == "Ingresar datos de PyME":
     
         # 3列目
         with col3:
-            st.write("###### :blue[Estado de Resultadosl]") 
+            st.write("###### :blue[Estado Resultados (lps.)]") 
             ventas_anuales = st.number_input("Ventas anuales", min_value=0, step=1)
             costos_deventas = st.number_input("Costos de ventas", min_value=0, step=1)
             costos_administrativos = st.number_input("Costos administrativos", min_value=0, step=1)
             costos_financieros = st.number_input("Costos financieros", min_value=0, step=1)
 
+        # 4列目
+        with col4:
+            st.write("###### :blue[Créditos y seguimiento]") 
+            monto_préstamos = st.number_input("monto de créditos (lps.)", min_value=0, step=1)
+            plazo_préstamos = st.number_input("plazo de créditos (meses)", min_value=0, step=1)
+            tasa_préstamos = st.number_input("tasa interés (%)", min_value=0, step=1)
+            retraso_pago = st.checkbox("¿Hubo demora en pagos?")
+
+        
         # フォーム送信ボタン
         enviado = st.form_submit_button("Guardar datos")
     
