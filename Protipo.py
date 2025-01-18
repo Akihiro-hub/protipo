@@ -195,7 +195,9 @@ elif opcion == "Analizar PyME":
                 
                     times_interest_earned = (ventas_anuales - costos_deventas - costos_administrativos) / costos_financieros
                     operating_income_margin = ((ventas_anuales - costos_deventas - costos_administrativos) / ventas_anuales) * 100
-                    razon_capital_propio = (capital_propio / total_activos) * 100                
+                    razon_capital_propio = (capital_propio / total_activos) * 100
+                    rotacion_at = (ventas_anuales / total_activos)
+ 
                     return times_interest_earned, operating_income_margin, razon_capital_propio
                 
                 # 全企業の平均値を計算
@@ -220,6 +222,10 @@ elif opcion == "Analizar PyME":
                 promedio_capital_propio = (
                     (df_empresas["capital_propio"] / (df_empresas["activos_corrientes"] + df_empresas["activos_fijos"])) * 100
                 ).mean()
+
+                promedio_rotacion_at = (
+                    (df_empresas["ventas_anuales"] / (df_empresas["activos_corrientes"] + df_empresas["activos_fijos"])) * 100
+                ).mean()
                 
                 # 現在の企業データに基づく指標を計算
                 times_interest_earned, operating_income_margin, razon_capital_propio = calcular_indicadores(
@@ -238,14 +244,10 @@ elif opcion == "Analizar PyME":
                     st.warning("La rentabilidad del negocio puede ser baja.")
                 if times_interest_earned <= 1.3 or razon_capital_propio <= 35:
                     st.warning("El negocio puede estar altamente endeudado, considerando su nivel de ganancias o nivel del capital propio.")
-
-                # 総資産回転率を計算
-                activos_totales = empresa[9] + empresa[10]
-                rotacion_at = empresa[5] / activos_totales if activos_totales > 0 else 0
                 
                 # 横棒グラフのデータ準備
                 valores = [rotacion_at, promedio_rotacion_at]
-                labels = ["Rotación de activos (PyME)", "Promedio general"]
+                labels = ["La empresa", "Promedio de empresas"]
                 
                 # グラフの作成
                 fig, ax = plt.subplots(figsize=(8, 4))
