@@ -178,56 +178,57 @@ elif opcion == "Analizar PyME":
         empresa = buscar_empresa_por_id(conn, empresa_id)
 
         if empresa:
-            # 財務分析の計算
-            def calcular_indicadores(ventas_anuales, costos_deventas, costos_administrativos, costos_financieros, capital_propio, activos_corrientes, activos_fijos):
-                if costos_financieros == 0:
-                    costos_financieros = 1  # ゼロ除算を防ぐため
-                if ventas_anuales == 0:
-                    ventas_anuales = 1  # ゼロ除算を防ぐため
-                if activos_corrientes + activos_fijos == 0:
-                    total_activos = 1  # ゼロ除算を防ぐため
-                else:
-                    total_activos = activos_corrientes + activos_fijos
-            
-                times_interest_earned = (ventas_anuales - costos_deventas - costos_administrativos) / costos_financieros
-                operating_income_margin = ((ventas_anuales - costos_deventas - costos_administrativos) / ventas_anuales) * 100
-                razon_capital_propio = (capital_propio / total_activos) * 100
-            
-                return times_interest_earned, operating_income_margin, razon_capital_propio
-            
-            
-            # 全企業の平均値を計算
-            todas_empresas = obtener_todas_empresas(conn)
-            
-            df_empresas = pd.DataFrame(todas_empresas, columns=[
-                "id", "nombre", "sector", "uso_fondos", "no_empleados", "ventas_anuales", "costos_deventas", "costos_administrativos",
-                "costos_financieros", "activos_corrientes", "activos_fijos", "pasivos", "capital_propio", "monto_préstamos", "plazo_préstamos", "tasa_préstamos", "retraso_pago"
-            ])
-        
-            # 各指標の平均値を計算
-            promedio_tie = (
-                (df_empresas["ventas_anuales"] - df_empresas["costos_deventas"] - df_empresas["costos_administrativos"])
-                / df_empresas["costos_financieros"]
-            ).mean()
-            
-            promedio_margin = (
-                ((df_empresas["ventas_anuales"] - df_empresas["costos_deventas"] - df_empresas["costos_administrativos"])
-                 / df_empresas["ventas_anuales"]) * 100
-            ).mean()
-            
-            promedio_capital_propio = (
-                (df_empresas["capital_propio"] / (df_empresas["activos_corrientes"] + df_empresas["activos_fijos"])) * 100
-            ).mean()
-            
-            # 現在の企業データに基づく指標を計算
-            times_interest_earned, operating_income_margin, razon_capital_propio = calcular_indicadores(
-                empresa[5], empresa[6], empresa[7], empresa[8], empresa[12], empresa[9], empresa[10]
-            )
-            
-            # 結果の表示
+            # ダッシュボード的な表示
             col1, col2 = st.columns(2)  # 2列を作成
             
             with col1:
+            # 財務分析の計算
+                def calcular_indicadores(ventas_anuales, costos_deventas, costos_administrativos, costos_financieros, capital_propio, activos_corrientes, activos_fijos):
+                    if costos_financieros == 0:
+                        costos_financieros = 1  # ゼロ除算を防ぐため
+                    if ventas_anuales == 0:
+                        ventas_anuales = 1  # ゼロ除算を防ぐため
+                    if activos_corrientes + activos_fijos == 0:
+                        total_activos = 1  # ゼロ除算を防ぐため
+                    else:
+                        total_activos = activos_corrientes + activos_fijos
+                
+                    times_interest_earned = (ventas_anuales - costos_deventas - costos_administrativos) / costos_financieros
+                    operating_income_margin = ((ventas_anuales - costos_deventas - costos_administrativos) / ventas_anuales) * 100
+                    razon_capital_propio = (capital_propio / total_activos) * 100
+                
+                    return times_interest_earned, operating_income_margin, razon_capital_propio
+                
+                
+                # 全企業の平均値を計算
+                todas_empresas = obtener_todas_empresas(conn)
+                
+                df_empresas = pd.DataFrame(todas_empresas, columns=[
+                    "id", "nombre", "sector", "uso_fondos", "no_empleados", "ventas_anuales", "costos_deventas", "costos_administrativos",
+                    "costos_financieros", "activos_corrientes", "activos_fijos", "pasivos", "capital_propio", "monto_préstamos", "plazo_préstamos", "tasa_préstamos", "retraso_pago"
+                ])
+            
+                # 各指標の平均値を計算
+                promedio_tie = (
+                    (df_empresas["ventas_anuales"] - df_empresas["costos_deventas"] - df_empresas["costos_administrativos"])
+                    / df_empresas["costos_financieros"]
+                ).mean()
+                
+                promedio_margin = (
+                    ((df_empresas["ventas_anuales"] - df_empresas["costos_deventas"] - df_empresas["costos_administrativos"])
+                     / df_empresas["ventas_anuales"]) * 100
+                ).mean()
+                
+                promedio_capital_propio = (
+                    (df_empresas["capital_propio"] / (df_empresas["activos_corrientes"] + df_empresas["activos_fijos"])) * 100
+                ).mean()
+                
+                # 現在の企業データに基づく指標を計算
+                times_interest_earned, operating_income_margin, razon_capital_propio = calcular_indicadores(
+                    empresa[5], empresa[6], empresa[7], empresa[8], empresa[12], empresa[9], empresa[10]
+                )
+            
+                # 財務指標の計算結果等の表示
                 st.write("##### :green[Indicadores principales]")
                 st.write(f"**Nombre PyME:** {empresa[1]}")
                 st.write(f"**Razón de veces cubriendo el interés (TIE):** {times_interest_earned:.1f} veces (Promedio: {promedio_tie:.1f} veces)")
@@ -262,13 +263,13 @@ elif opcion == "Analizar PyME":
                         breakeven_sales = (costos_administrativos + costos_financieros) / (1 - variable_ratio)
                         margen_seguridad = ((ventas_anuales-breakeven_sales)/ventas_anuales)*100
                 
-                        st.write(f"Ventas anuales en el punto de equilibrio: {breakeven_sales:.0f} Lps")
+                        st.write(f"Venta anual al punto de equilibrio: {breakeven_sales:.0f} L.")
                         st.write(f"Ratio de margen de seguridad: {margen_seguridad:.1f} %")
-    
+
                         # Warnings
                         if margen_seguridad <= 10:
                             st.warning("La rentabilidad del negocio puede ser baja, considerando su margen de seguridad.")
-                
+                    
                         # 損益分岐点のグラフを描画
                         fig, ax = plt.subplots()
                         
