@@ -228,7 +228,7 @@ elif opcion == "Analizar PyME":
             col1, col2 = st.columns(2)  # 2列を作成
             
             with col1:
-                st.subheader("Indicadores")
+                st.write("##### :green[Indicadores principales]")
                 st.write(f"**Nombre PyME:** {empresa[1]}")
                 st.write(f"**Razón de veces cubriendo el interés (TIE):** {times_interest_earned:.1f} veces (Promedio: {promedio_tie:.1f} veces)")
                 st.write(f"**Margen operativo:** {operating_income_margin:.1f}% (Promedio: {promedio_margin:.1f}%)")
@@ -242,9 +242,7 @@ elif opcion == "Analizar PyME":
             
             with col2:
                 # 損益分岐点分析
-                st.write("#### :green[Resultado del análisis del punto de equilibrio]")
-                st.write("Se presentan abajo el resultado del análisis del punto de equilibrio, aunque el mismo podrá ser impreciso, suponiendo que costos de venta se clasifican en costos variables y los otros costos en fijos.")
-    
+                st.write("##### :green[Análisis del punto de equilibrio]")
                 # empresaからデータを取得
                 ventas_anuales = empresa[5] or 0  # ventas_anualesは6番目の列
                 costos_deventas = empresa[6] or 0  # costos_deventasは7番目の列
@@ -264,7 +262,7 @@ elif opcion == "Analizar PyME":
                         breakeven_sales = (costos_administrativos + costos_financieros) / (1 - variable_ratio)
                         margen_seguridad = ((ventas_anuales-breakeven_sales)/ventas_anuales)*100
                 
-                        st.write(f"Posible monto de ventas anuales en el punto de equilibrio: {breakeven_sales:.1f} Lps")
+                        st.write(f"Ventas anuales en el punto de equilibrio: {breakeven_sales:.0f} Lps")
                         st.write(f"Ratio de margen de seguridad: {margen_seguridad:.1f} %")
     
                         # Warnings
@@ -294,6 +292,7 @@ elif opcion == "Analizar PyME":
                 
                         ax.legend()  # Show the legend
                         st.pyplot(fig)
+                        st.write("Nota: Costos de venta se clasifican en costos variables y los otros costos en fijos, en est análisis.")
 
         else:
             st.error("No se encontró la empresa con el ID especificado.")
