@@ -143,7 +143,7 @@ if opcion == "Inscribir datos de PyME":
                 nombre,  
                 sector,  
                 uso_fondos,
-                monto_préstamos or 0,
+                no_empleados or 0,
                 ventas_anuales or 0,
                 costos_deventas or 0,
                 costos_administrativos or 0,
@@ -152,6 +152,9 @@ if opcion == "Inscribir datos de PyME":
                 activos_fijos or 0,
                 pasivos or 0,
                 capital_propio or 0,
+                monto_préstamos or 0,
+                plazo_préstamos or 0,
+                tasa_préstamos or 0,
                 1 if retraso_pago else 0  # チェックボックスの値は整数型に変換
             )
             insertar_empresa(conn, datos)
