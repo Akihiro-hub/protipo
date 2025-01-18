@@ -326,7 +326,7 @@ elif opcion == "Analizar PyME":
 
 elif opcion == "Analizar moras":
     st.header("Estimar la probabilidad de mora por IA")
-    st.write("La estimacion se realiza por SVM, un método de aprendisaje automatico, en base a las PyMEs registrados en base de datos. Como esta herramienta es prototipo, no se presenta cifra analizada sino cifra seleccionada al azar.")
+    st.write("La estimacion se realiza por SVM, un método de aprendisaje automatico, en base a las PyMEs registrados en base de datos.")
     
     # 入力フィールドの設定
     uso_fondos = st.selectbox("Uso de fondo solicitado", ["Capital de trabajo", "Capital de inversión"])
