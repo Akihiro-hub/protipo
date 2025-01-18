@@ -266,14 +266,7 @@ elif opcion == "Analizar PyME":
                 # 0.1%～25.0%の範囲でランダムな値を生成
                 estimacion_prob = random.uniform(0.1, 25.0)
                 st.write(f"Probabilidad estimada de la mora por IA (valor ficticio): {estimacion_prob:.1f} %")
-    
-        # 結果の表示
-        if prediction_prob > 12:  # 高い確率（例: 12%以上の場合にエラー表示）
-            st.error(f"**Predicción:** Hay alta probabilidad de mora ({prediction_prob:.2f}%).")
-        else:  # 低い確率（例: 12%未満の場合に成功表示）
-            st.success(f"**Predicción:** Baja probabilidad de mora ({prediction_prob:.2f}%).")
 
-            
             
             with col2:
                 # 損益分岐点分析
