@@ -208,10 +208,10 @@ elif opcion == "Analizar PyME":
             todas_empresas = obtener_todas_empresas(conn)
             
             df_empresas = pd.DataFrame(todas_empresas, columns=[
-                "ID", "Nombre", "Sector", "Uso_fondos", "monto_préstamos", "Ventas_anuales", "Costos_deventas", "Costos_administrativos",
-                "Costos_financieros", "Activos_corrientes", "Activos_fijos", "Pasivos", "Capital_propio", "Retraso_pago"
+                "id", "nombre", "sector", "uso_fondos", "no_empleados", "ventas_anuales", "costos_deventas", "costos_administrativos",
+                "costos_financieros", "activos_corrientes", "activos_fijos", "pasivos", "capital_propio", "monto_préstamos", "plazo_préstamos", "tasa_préstamos", "retraso_pago"
             ])
-            
+        
             # 各指標の平均値を計算
             promedio_tie = (
                 (df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"])
