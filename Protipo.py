@@ -178,14 +178,6 @@ elif opcion == "Analizar PyME":
         empresa = buscar_empresa_por_id(conn, empresa_id)
 
         if empresa:
-            col1, col2 = st.columns(2)  # 2列を作成
-            
-            with col1:
-                st.subheader("Información de PyME")
-                st.write(f"**Nombre:** {empresa[1]}")
-                st.write(f"**Sector:** {empresa[2]}")
-                st.write(f"**Uso de fondos:** {empresa[3]}")
-
             # 財務分析の計算
             def calcular_indicadores(ventas_anuales, costos_deventas, costos_administrativos, costos_financieros, capital_propio, activos_corrientes, activos_fijos):
                 if costos_financieros == 0:
@@ -233,8 +225,11 @@ elif opcion == "Analizar PyME":
             )
             
             # 結果の表示
-            with col2:
-                st.subheader("Análisis financiero")
+            col1, col2 = st.columns(2)  # 2列を作成
+            
+            with col1:
+                st.subheader("Indicadores")
+                st.write(f"**Nombre PyME:** {empresa[1]}")
                 st.write(f"**Razón de veces cubriendo el interés (TIE):** {times_interest_earned:.1f} veces (Promedio: {promedio_tie:.1f} veces)")
                 st.write(f"**Margen operativo:** {operating_income_margin:.1f}% (Promedio: {promedio_margin:.1f}%)")
                 st.write(f"**Razón de capital propio:** {razon_capital_propio:.1f}% (Promedio: {promedio_capital_propio:.1f}%)")
@@ -244,60 +239,61 @@ elif opcion == "Analizar PyME":
                     st.warning("La rentabilidad del negocio puede ser baja.")
                 if times_interest_earned <= 1.3 or razon_capital_propio <= 35:
                     st.warning("El negocio puede estar altamente endeudado, considerando su nivel de ganancias o nivel del capital propio.")
-
-            # 損益分岐点分析
-            st.write("#### :green[Resultado del análisis del punto de equilibrio]")
-            st.write("Se presentan abajo el resultado del análisis del punto de equilibrio, aunque el mismo podrá ser impreciso, suponiendo que costos de venta se clasifican en costos variables y los otros costos en fijos.")
-
-            # empresaからデータを取得
-            ventas_anuales = empresa[5] or 0  # ventas_anualesは6番目の列
-            costos_deventas = empresa[6] or 0  # costos_deventasは7番目の列
-            costos_administrativos = empresa[7] or 0  # costos_administrativos
-            costos_financieros = empresa[8] or 0  # costos_financieros
             
-            # 安全対策：ゼロ除算とNone値のチェック
-            if ventas_anuales == 0 or costos_deventas is None or ventas_anuales is None:
-                st.error("No se puede calcular el punto de equilibrio porque las ventas anuales o los costos de ventas son 0 o no están definidos.")
-            else:
-                # コスト比率を計算
-                variable_ratio = costos_deventas / ventas_anuales
-                if variable_ratio >= 1:
-                    st.error("El punto de equilibrio no puede ser calculado porque los costos variables superan o igualan las ventas anuales.")
+            with col2:
+                # 損益分岐点分析
+                st.write("#### :green[Resultado del análisis del punto de equilibrio]")
+                st.write("Se presentan abajo el resultado del análisis del punto de equilibrio, aunque el mismo podrá ser impreciso, suponiendo que costos de venta se clasifican en costos variables y los otros costos en fijos.")
+    
+                # empresaからデータを取得
+                ventas_anuales = empresa[5] or 0  # ventas_anualesは6番目の列
+                costos_deventas = empresa[6] or 0  # costos_deventasは7番目の列
+                costos_administrativos = empresa[7] or 0  # costos_administrativos
+                costos_financieros = empresa[8] or 0  # costos_financieros
+                
+                # 安全対策：ゼロ除算とNone値のチェック
+                if ventas_anuales == 0 or costos_deventas is None or ventas_anuales is None:
+                    st.error("No se puede calcular el punto de equilibrio porque las ventas anuales o los costos de ventas son 0 o no están definidos.")
                 else:
-                    # 損益分岐点の売上を計算
-                    breakeven_sales = (costos_administrativos + costos_financieros) / (1 - variable_ratio)
-                    margen_seguridad = ((ventas_anuales-breakeven_sales)/ventas_anuales)*100
-            
-                    st.write(f"Posible monto de ventas anuales en el punto de equilibrio: {breakeven_sales:.1f} Lps")
-                    st.write(f"Ratio de margen de seguridad: {margen_seguridad:.1f} %")
-
-                    # Warnings
-                    if margen_seguridad <= 10:
-                        st.warning("La rentabilidad del negocio puede ser baja, considerando su margen de seguridad.")
-            
-                    # 損益分岐点のグラフを描画
-                    fig, ax = plt.subplots()
-                    
-                    sales_range = list(range(int(breakeven_sales * 0.8), int(breakeven_sales * 1.2), 100))
-                    total_costs = [costos_administrativos + costos_financieros + (variable_ratio * s) for s in sales_range]
-                    
-                    ax.plot(sales_range, total_costs, color='skyblue', label="Costos totales (Costos fijos + Costos variables)", marker='o')
-                    ax.plot(sales_range, sales_range, color='orange', label="Ventas", marker='o')
-                    
-                    ax.set_title("Estimación del punto de equilibrio")
-                    ax.set_xlabel("Ventas (Lps)")
-                    ax.set_ylabel("Costos y ventas (Lps)")
-                    
-                    ax.axvline(breakeven_sales, color='red', linestyle='--', label=f"Punto de equilibrio: {breakeven_sales:.1f} Lps")
-                    
-                    ax.fill_between(sales_range, total_costs, sales_range, where=[s > breakeven_sales for s in sales_range], color='skyblue', alpha=0.3, interpolate=True)
-                    
-                    mid_x = breakeven_sales * 1.1
-                    mid_y = (max(total_costs) + max(sales_range)) / 2
-                    ax.text(mid_x, mid_y, "Ganancia = Área del color azul claro", color="blue", fontsize=7, ha="left")
-            
-                    ax.legend()  # Show the legend
-                    st.pyplot(fig)
+                    # コスト比率を計算
+                    variable_ratio = costos_deventas / ventas_anuales
+                    if variable_ratio >= 1:
+                        st.error("El punto de equilibrio no puede ser calculado porque los costos variables superan o igualan las ventas anuales.")
+                    else:
+                        # 損益分岐点の売上を計算
+                        breakeven_sales = (costos_administrativos + costos_financieros) / (1 - variable_ratio)
+                        margen_seguridad = ((ventas_anuales-breakeven_sales)/ventas_anuales)*100
+                
+                        st.write(f"Posible monto de ventas anuales en el punto de equilibrio: {breakeven_sales:.1f} Lps")
+                        st.write(f"Ratio de margen de seguridad: {margen_seguridad:.1f} %")
+    
+                        # Warnings
+                        if margen_seguridad <= 10:
+                            st.warning("La rentabilidad del negocio puede ser baja, considerando su margen de seguridad.")
+                
+                        # 損益分岐点のグラフを描画
+                        fig, ax = plt.subplots()
+                        
+                        sales_range = list(range(int(breakeven_sales * 0.8), int(breakeven_sales * 1.2), 100))
+                        total_costs = [costos_administrativos + costos_financieros + (variable_ratio * s) for s in sales_range]
+                        
+                        ax.plot(sales_range, total_costs, color='skyblue', label="Costos totales (Costos fijos + Costos variables)", marker='o')
+                        ax.plot(sales_range, sales_range, color='orange', label="Ventas", marker='o')
+                        
+                        ax.set_title("Estimación del punto de equilibrio")
+                        ax.set_xlabel("Ventas (Lps)")
+                        ax.set_ylabel("Costos y ventas (Lps)")
+                        
+                        ax.axvline(breakeven_sales, color='red', linestyle='--', label=f"Punto de equilibrio: {breakeven_sales:.1f} Lps")
+                        
+                        ax.fill_between(sales_range, total_costs, sales_range, where=[s > breakeven_sales for s in sales_range], color='skyblue', alpha=0.3, interpolate=True)
+                        
+                        mid_x = breakeven_sales * 1.1
+                        mid_y = (max(total_costs) + max(sales_range)) / 2
+                        ax.text(mid_x, mid_y, "Ganancia = Área del color azul claro", color="blue", fontsize=7, ha="left")
+                
+                        ax.legend()  # Show the legend
+                        st.pyplot(fig)
 
         else:
             st.error("No se encontró la empresa con el ID especificado.")
