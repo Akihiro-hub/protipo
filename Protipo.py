@@ -331,11 +331,9 @@ elif opcion == "Analizar moras":
     # 入力フィールドの設定
     uso_fondos = st.selectbox("Uso de fondo solicitado", ["Capital de trabajo", "Capital de inversión"])
     monto_préstamos = st.slider("Monto de préstamo (Lps)", 10000, 10000000, step=10000)
-    capital_propio = st.slider("Razón de capital propio (%)", 1, 100)
-    times_interest_earned = st.slider("Times interest earned (veces)", 0.5, 5.0, step=0.1)
-    operating_margin = st.slider("Margen operativo (%)", 0.0, 50.0, step=0.5)
-    safety_margin = st.slider("Margen de seguridad (%)", 0.0, 50.0, step=0.5)
-    
+    tasa_prestamos = st.slider("tasa de interés (%)", 5, 35)
+    plazo_préstamos = st.slider("Plazo de préstamos (meses)", 5, 30, step=1)
+
     # モデルのトレーニングと予測
     if st.button("Calcular probabilidad de mora"):
         # 0.1%～25.0%の範囲でランダムな値を生成
@@ -345,15 +343,10 @@ elif opcion == "Analizar moras":
         # データフレーム作成
         # todas_empresas = obtener_todas_empresas(conn)
         # if todas_empresas:
-            # df = pd.DataFrame(todas_empresas, columns=["id", "nombre", "sector", "uso_fondos", "monto_préstamos", "ventas_anuales", "costos_deventas", "costos_administrativos", "costos_financieros", "activos_corrientes", "activos_fijos", "pasivos", "capital_propio", "retraso_pago"])
-            
-            # df["uso_fondos"] = df["uso_fondos"].apply(lambda x: 1 if x == "capital de trabajo" else 0)
-            # df["times interest earned"] = ((df["ventas_anuales"] - df["costos_deventas"] - df["costos_administrativos"]) / (df["costos_financieros"] + 1e-6))
-            # df["operating margin"] = ( ((df["ventas_anuales"] - df["costos_deventas"] - df["costos_administrativos"]) / df["ventas_anuales"]) * 100)
-            # df["safety margin"] = (((df["ventas_anuales"] -  (df["costos_deventas"] + df["costos_administrativos"])) / df["ventas_anuales"]) * 100)
+            # df = pd.DataFrame(todas_empresas, columns=["id", "nombre", "sector", "uso_fondos", "monto_préstamos" "tasa_prestamos", "plazo_préstamos", "retraso_pago"])
             
             # 必要な列を選択
-            # features = df[["uso_fondos", "monto_préstamos", "Times interest earned", "Operating margin", "Safety margin"]]
+            # features = df[["uso_fondos", "monto_préstamos" "tasa_prestamos", "plazo_préstamos"]]
             # target = df["retraso_pago"]
             
             # SVMモデルのトレーニング
@@ -377,10 +370,8 @@ elif opcion == "Analizar moras":
             # prediction_prob = model.predict_proba(input_data)[0][1]
             
             # 結果の表示
-            # if prediction[0] == 1:
-                # st.error(f"**Predicción:** Hay alta probabilidad de mora ({prediction_prob:.2%}).")
-            # else:
-                # st.success(f"**Predicción:** Baja probabilidad de mora ({prediction_prob:.2%}).")
+            # st.wrire(f"**Probabilidad de mora ({prediction_prob:.2%}).")
+
  
 
 
