@@ -329,7 +329,7 @@ elif opcion == "Analizar moras":
     st.write("La estimacion se realiza por SVM, un método de aprendisaje automatico, en base a las PyMEs registrados en base de datos. Como esta herramienta es prototipo, no se presenta cifra analizada sino cifra seleccionada al azar.")
     
     # 入力フィールドの設定
-    uso_fondos = st.selectbox("Uso de fondos (1=Capital de trabajo, 0=Inversion)", [1, 0])
+    uso_fondos = st.selectbox("Uso de fondo solicitado", ["Capital de trabajo", "Capital de inversión"])
     monto_préstamos = st.slider("Monto de préstamo (Lps)", 10000, 10000000, step=10000)
     capital_propio = st.slider("Razón de capital propio (%)", 1, 100)
     times_interest_earned = st.slider("Times interest earned (veces)", 0.5, 5.0, step=0.1)
@@ -347,10 +347,10 @@ elif opcion == "Analizar moras":
         # if todas_empresas:
             # df = pd.DataFrame(todas_empresas, columns=["id", "nombre", "sector", "uso_fondos", "monto_préstamos", "ventas_anuales", "costos_deventas", "costos_administrativos", "costos_financieros", "activos_corrientes", "activos_fijos", "pasivos", "capital_propio", "retraso_pago"])
             
-            # df["uso_fondos"] = df["Uso_fondos"].apply(lambda x: 1 if x == "capital de trabajo" else 0)
-            # df["times interest earned"] = ((df["ventas_anuales"] - df["Costos_deventas"] - df["costos_administrativos"]) / (df["Costos_financieros"] + 1e-6))
-            # df["Operating margin"] = ( ((df["Ventas_anuales"] - df["costos_deventas"] - df["costos_administrativos"]) / df["ventas_anuales"]) * 100)
-            # df["Safety margin"] = (((df["ventas_anuales"] -  (df["costos_deventas"] + df["costos_administrativos"])) / df["ventas_anuales"]) * 100)
+            # df["uso_fondos"] = df["uso_fondos"].apply(lambda x: 1 if x == "capital de trabajo" else 0)
+            # df["times interest earned"] = ((df["ventas_anuales"] - df["costos_deventas"] - df["costos_administrativos"]) / (df["costos_financieros"] + 1e-6))
+            # df["operating margin"] = ( ((df["ventas_anuales"] - df["costos_deventas"] - df["costos_administrativos"]) / df["ventas_anuales"]) * 100)
+            # df["safety margin"] = (((df["ventas_anuales"] -  (df["costos_deventas"] + df["costos_administrativos"])) / df["ventas_anuales"]) * 100)
             
             # 必要な列を選択
             # features = df[["uso_fondos", "monto_préstamos", "Times interest earned", "Operating margin", "Safety margin"]]
