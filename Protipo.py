@@ -18,7 +18,7 @@ def init_db():
             nombre TEXT,
             sector TEXT,
             uso_fondos TEXT,
-            monto_préstamos REAL,
+            no_empleados REAL,
             ventas_anuales REAL,
             costos_deventas REAL,
             costos_administrativos REAL, 
@@ -27,6 +27,9 @@ def init_db():
             activos_fijos REAL,
             pasivos REAL,
             capital_propio REAL,
+            monto_préstamos REAL,
+            plazo_préstamos REAL,
+            tasa_préstamos REAL,
             retraso_pago INTEGER
         )
     """)
@@ -38,9 +41,10 @@ def insertar_empresa(conn, datos):
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO empresas (
-            nombre, sector, uso_fondos, monto_préstamos, ventas_anuales, costos_deventas, costos_administrativos, 
-            costos_financieros, activos_corrientes, activos_fijos, pasivos, capital_propio, retraso_pago
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            nombre, sector, uso_fondos, no_empleados, ventas_anuales, costos_deventas, costos_administrativos, 
+            costos_financieros, activos_corrientes, activos_fijos, pasivos, capital_propio, monto_préstamos, plazo_préstamos,
+            tasa_préstamos, retraso_pago
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, datos)
     conn.commit()
 
