@@ -244,6 +244,10 @@ elif opcion == "Analizar PyME":
                     st.warning("La rentabilidad del negocio puede ser baja.")
                 if times_interest_earned <= 1.3 or razon_capital_propio <= 35:
                     st.warning("El negocio puede estar altamente endeudado, considerando su nivel de ganancias o nivel del capital propio.")
+
+                # Rotación de activos totales を計算
+                total_activos = empresa[9] + empresa[10]
+                rotacion_at = empresa[5] / total_activos if total_activos > 0 else 0
                 
                 # 横棒グラフのデータ準備
                 valores = [rotacion_at, promedio_rotacion_at]
