@@ -214,17 +214,17 @@ elif opcion == "Analizar PyME":
         
             # 各指標の平均値を計算
             promedio_tie = (
-                (df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"])
-                / df_empresas["Costos_financieros"]
+                (df_empresas["ventas_anuales"] - df_empresas["costos_deventas"] - df_empresas["costos_administrativos"])
+                / df_empresas["costos_financieros"]
             ).mean()
             
             promedio_margin = (
-                ((df_empresas["Ventas_anuales"] - df_empresas["Costos_deventas"] - df_empresas["Costos_administrativos"])
-                 / df_empresas["Ventas_anuales"]) * 100
+                ((df_empresas["ventas_anuales"] - df_empresas["costos_deventas"] - df_empresas["costos_administrativos"])
+                 / df_empresas["ventas_anuales"]) * 100
             ).mean()
             
             promedio_capital_propio = (
-                (df_empresas["Capital_propio"] / (df_empresas["Activos_corrientes"] + df_empresas["Activos_fijos"])) * 100
+                (df_empresas["capital_propio"] / (df_empresas["activos_corrientes"] + df_empresas["activos_fijos"])) * 100
             ).mean()
             
             # 現在の企業データに基づく指標を計算
