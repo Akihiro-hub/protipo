@@ -99,7 +99,7 @@ if opcion == "Ingresar datos de PyME":
     
         # 1列目
         with col1:
-            st.write("###### :blue[Perfil principal]") 
+            st.write("###### :blue[Perfil principal (Perfilamiento)]") 
             nombre = st.text_input("Nombre de la empresa")
             sector = st.selectbox("Sector de la empresa", ["Carpintería", "Comedor", "Panadería", "Herrería", "Comercio", "Otros"])
             uso_fondos = st.selectbox("Uso de fondo solicitado", ["Capital de trabajo", "Capital de inversión"])
@@ -107,7 +107,7 @@ if opcion == "Ingresar datos de PyME":
  
         # 2列目
         with col2:
-            st.write("###### :blue[Balance General (lps.)]") 
+            st.write("###### :blue[Balance General (Análisis)]") 
             activos_corrientes = st.number_input("Activos corrientes", min_value=0, step=1)
             activos_fijos = st.number_input("Activos fijos", min_value=0, step=1)
             pasivos = st.number_input("Pasivos", min_value=0, step=1)
@@ -115,7 +115,7 @@ if opcion == "Ingresar datos de PyME":
     
         # 3列目
         with col3:
-            st.write("###### :blue[Estado Resultados (lps.)]") 
+            st.write("###### :blue[Estado Resultados (Análisis)]") 
             ventas_anuales = st.number_input("Ventas anuales", min_value=0, step=1)
             costos_deventas = st.number_input("Costos de ventas", min_value=0, step=1)
             costos_administrativos = st.number_input("Costos administrativos", min_value=0, step=1)
@@ -123,7 +123,7 @@ if opcion == "Ingresar datos de PyME":
 
         # 4列目
         with col4:
-            st.write("###### :blue[Créditos y seguimiento]") 
+            st.write("###### :blue[Créditos (Seguimiento)]") 
             monto_préstamos = st.number_input("monto de créditos (lps.)", min_value=0, step=1)
             plazo_préstamos = st.number_input("plazo de créditos (meses)", min_value=0, step=1)
             tasa_préstamos = st.number_input("tasa interés (%)", min_value=0, step=1)
