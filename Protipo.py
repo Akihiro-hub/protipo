@@ -74,15 +74,15 @@ conn = init_db()
 
 # サイドバーの選択ボックス
 opcion = st.sidebar.selectbox("Seleccionar pantalla", [
-    "Ingresar datos de PyME",
-    "Analizar información PyME",
+    "Inscribir datos de PyME",
+    "Analizar PyME",
     "Analizar moras"
 ])
 
-if opcion == "Ingresar datos de PyME":
+if opcion == "Inscribir datos de PyME":
     # Streamlitアプリの開始
     st.title("Sistema de Gestión de Información para Créditos a PyMEs")
-    st.header("Ingresar datos de PyME solicitante")
+    st.header("Inscribir datos de PyME solicitante")
     
     # 最新の企業IDを取得
     cursor = conn.cursor()
@@ -161,7 +161,7 @@ if opcion == "Ingresar datos de PyME":
         conn.commit()
         st.success("Todos los datos han sido eliminados.")
 
-elif opcion == "Analizar información PyME":
+elif opcion == "Analizar PyME":
     st.header("Analizar PyME solicitante (Dashboard)")
 
     # 検索フォーム
