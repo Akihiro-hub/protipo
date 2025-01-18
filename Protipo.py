@@ -224,7 +224,7 @@ elif opcion == "Analizar PyME":
                 ).mean()
 
                 promedio_rotacion_at = (
-                    (df_empresas["ventas_anuales"] / (df_empresas["activos_corrientes"] + df_empresas["activos_fijos"])) * 100
+                    (df_empresas["ventas_anuales"] / (df_empresas["activos_corrientes"] + df_empresas["activos_fijos"])) 
                 ).mean()
                 
                 # 現在の企業データに基づく指標を計算
@@ -257,7 +257,7 @@ elif opcion == "Analizar PyME":
                 fig, ax = plt.subplots(figsize=(8, 4))
                 ax.barh(labels, valores, color=["blue", "green"])
                 ax.set_xlabel("Veces")
-                ax.set_title("Comparación de la rotación de activos totales")
+                ax.set_title("Comparación de la rotación de activos totales, como indeicador de eficiencia")
                 ax.grid(axis="x", linestyle="--", alpha=0.7)
                 
                 # グラフをStreamlitで表示
